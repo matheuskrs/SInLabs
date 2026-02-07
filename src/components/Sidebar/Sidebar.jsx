@@ -56,10 +56,10 @@ export default function Sidebar({ activePage }) {
       path: "/systems"
     },
     {
-      id: "association",
+      id: "associations",
       label: "Associação",
       icon: faLink,
-      path: "/association",
+      path: "/associations",
     },
     {
       id: "downloads",

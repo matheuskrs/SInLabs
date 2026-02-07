@@ -13,7 +13,7 @@ import Tooltip from "~/components/Tooltip/Tooltip";
 import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
 import { useToast } from "~/providers/Toast/useToast";
 import profileAccessImg from "~/assets/AccessManagement/ProfileAccessImg.png";
-import {getAccessPermissions, getAccessProfiles } from "~/services/AccessManagement/accessService.api";
+import { getAccessPermissions, getAccessProfiles } from "~/services/AccessManagement/accessService.api";
 
 export default function AccessManagement() {
   const [rows, setRows] = useState([]);

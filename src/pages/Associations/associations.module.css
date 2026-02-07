@@ -1,0 +1,32 @@
+.header-wrapper {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+.header-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.associations-title {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.associations-subtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.associations-search {
+  padding: 13px 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  flex: 1.5;
+  min-width: 0px;
+}

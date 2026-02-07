@@ -1,8 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import { lazy } from "react";
-import ErrorPage from "~/pages/ErrorPage/ErrorPage";
-import RootLayout from "~/layouts/RootLayout/RootLayout";
-
+const ErrorPage = lazy(() => import("~/pages/ErrorPage/ErrorPage"));
+const RootLayout = lazy(() => import("~/layouts/RootLayout/RootLayout"));
 const AuthLayout = lazy(() => import("~/layouts/Auth/AuthLayout"));
 const LoginPage = lazy(() => import("~/pages/Login/LoginPage"));
 const AccessManagementLayout = lazy(() => import("~/layouts/AccessManagement/AccessManagementLayout"));
@@ -13,6 +12,8 @@ const UsersLayout = lazy(() => import("~/layouts/Users/UsersLayout"));
 const Users = lazy(() => import("~/pages/Users/Users"));
 const SystemsLayout = lazy(() => import("~/layouts/Systems/SystemsLayout"));
 const Systems = lazy(() => import("~/pages/Systems/Systems"));
+const AssociationsLayout = lazy(() => import("~/layouts/Associations/AssociationsLayout"));
+const Associations = lazy(() => import("~/pages/Associations/Associations"));
 
 export const router = createBrowserRouter([
   {
@@ -42,6 +43,11 @@ export const router = createBrowserRouter([
         path: "/systems",
         element: <SystemsLayout />,
         children: [{ index: true, element: <Systems /> }],
+      },
+      {
+        path: "/associations",
+        element: <AssociationsLayout />,
+        children: [{ index: true, element: <Associations /> }],
       },
     ],
   },
