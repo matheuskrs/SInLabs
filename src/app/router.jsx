@@ -14,6 +14,7 @@ const Users = lazy(() => import("~/pages/Users/Users"));
 const Systems = lazy(() => import("~/pages/Systems/Systems"));
 const Associations = lazy(() => import("~/pages/Associations/Associations"));
 const Downloads = lazy(() => import("~/pages/Downloads/Downloads"));
+const Feed = lazy(() => import("~/pages/Feed/Feed"));
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,7 @@ export const router = createBrowserRouter([
           { path: "/systems", element: <Systems /> },
           { path: "/associations", element: <Associations /> },
           { path: "/downloads", element: <Downloads /> },
+          { path: "/feed", element: <Feed /> },
         ],
       },
     ],
