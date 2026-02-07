@@ -51,11 +51,11 @@ export default function Sidebar() {
       icon: faBuilding,
       path: "/laboratories",
     },
-    { 
+    {
       id: "systems",
       label: "Sistemas",
       icon: faBox,
-      path: "/systems"
+      path: "/systems",
     },
     {
       id: "associations",
@@ -69,11 +69,11 @@ export default function Sidebar() {
       icon: faDownload,
       path: "/downloads",
     },
-    { 
+    {
       id: "feed",
       label: "Feed de notícias",
       icon: faNewspaper,
-      path: "/feed"
+      path: "/feed",
     },
     {
       id: "management",
@@ -109,9 +109,9 @@ export default function Sidebar() {
   };
 
   const handleNavigate = async (path) => {
-    showLoading("Carregando página");
+    showLoading("Carregando");
+    await sleep(300);
     navigator(path);
-    setTimeout(() => hideLoading(), 150);
   };
   return (
     <aside
