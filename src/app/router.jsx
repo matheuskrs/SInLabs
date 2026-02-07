@@ -8,7 +8,7 @@ const AuthLayout = lazy(() => import("~/layouts/Auth/AuthLayout"));
 const AppLayout = lazy(() => import("~/layouts/App/AppLayout"));
 
 const LoginPage = lazy(() => import("~/pages/Login/LoginPage"));
-const AccessManagement = lazy(() => import("~/pages/AccessManagement/AccessManagement"));
+const ProfileManagement = lazy(() => import("~/pages/ProfileManagement/ProfileManagement"));
 const Laboratories = lazy(() => import("~/pages/Laboratories/Laboratories"));
 const Users = lazy(() => import("~/pages/Users/Users"));
 const Systems = lazy(() => import("~/pages/Systems/Systems"));
@@ -28,7 +28,7 @@ export const router = createBrowserRouter([
       {
         element: <AppLayout />,
         children: [
-          { path: "/access", element: <AccessManagement /> },
+          { path: "/accessProfiles", element: <ProfileManagement /> },
           { path: "/laboratories", element: <Laboratories /> },
           { path: "/users", element: <Users /> },
           { path: "/systems", element: <Systems /> },

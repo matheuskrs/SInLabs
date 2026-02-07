@@ -18,7 +18,7 @@ import { ptBR } from "@mui/x-data-grid/locales";
 import Modal from "~/components/Modal/Modal.jsx";
 import "~/styles/commonGrid.css";
 import { getUsers, getUserStatus } from "../../services/Users/usersService.api";
-import { getAccessProfiles } from "../../services/AccessManagement/accessService.api";
+import { getAccessProfiles } from "../../services/ProfileManagement/profileAccessService.api";
 import { getLaboratories } from "../../services/Laboratories/laboratoriesService.api";
 import Header from "../../components/Header/Header";
 

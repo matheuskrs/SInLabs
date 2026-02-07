@@ -5,20 +5,20 @@ import { faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "~/styles/commonGrid.css";
 import Modal from "~/components/Modal/Modal";
 import { useConfirm } from "~/components/ConfirmationDialog/UseConfirm";
-import styles from "./accessManagement.module.css";
+import styles from "./profileManagement.module.css";
 import { useMediaQuery } from "@mui/material";
 import { Select, MenuItem } from "@mui/material";
 import { useEffect, useMemo, useCallback, useState } from "react";
 import Tooltip from "~/components/Tooltip/Tooltip";
 import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
 import { useToast } from "~/providers/Toast/useToast";
-import profileAccessImg from "~/assets/AccessManagement/ProfileAccessImg.png";
+import profileAccessImg from "~/assets/ProfileManagement/ProfileAccessImg.png";
 import {
   getAccessPermissions,
   getAccessProfiles,
-} from "~/services/AccessManagement/accessService.api";
+} from "~/services/ProfileManagement/profileAccessService.api";
 import Header from "../../components/Header/Header";
-export default function AccessManagement() {
+export default function ProfileManagement() {
   const [rows, setRows] = useState([]);
   const [status, setStatus] = useState(0);
   const [openModal, setOpenModal] = useState(false);

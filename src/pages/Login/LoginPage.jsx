@@ -48,7 +48,7 @@ export default function LoginPage() {
         return;
       }
       showLoading("Autenticando e redirecionando");
-      navigate("/access");
+      navigate("/accessProfiles");
       await sleep(1500);
       toast.success("Sucesso", "Autenticação concluída com sucesso!");
     } catch (error) {

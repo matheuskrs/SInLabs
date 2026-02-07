@@ -34,10 +34,10 @@ export default function Sidebar() {
   const isActive = (path) => pathname.startsWith(path);
   const MENU_ITEMS = [
     {
-      id: "access",
+      id: "accessProfiles",
       label: "Perfis de acesso",
       icon: faShield,
-      path: "/access",
+      path: "/accessProfiles",
     },
     {
       id: "users",
