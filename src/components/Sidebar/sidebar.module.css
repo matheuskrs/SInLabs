@@ -122,6 +122,10 @@
   gap: 5px;
 }
 
+.sidebar:not(.collapsed) .sidebar-nav li span {
+  padding: 16px !important;
+}
+
 .sidebar.collapsed li span {
   justify-content: center;
 }
