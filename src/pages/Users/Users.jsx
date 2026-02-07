@@ -12,14 +12,15 @@ import {
   faTrash,
   faUpload,
 } from "@fortawesome/free-solid-svg-icons";
-import profileAccessImg from "~/assets/Users/usersImg.png";
+import usersImg from "~/assets/Users/usersImg.png";
 import { DataGrid } from "@mui/x-data-grid";
 import { ptBR } from "@mui/x-data-grid/locales";
 import Modal from "~/components/Modal/Modal.jsx";
-import "~/components/CommonGridCSS/commonGrid.css";
+import "~/styles/commonGrid.css";
 import { getUsers, getUserStatus } from "../../services/Users/usersService.api";
 import { getAccessProfiles } from "../../services/AccessManagement/accessService.api";
 import { getLaboratories } from "../../services/Laboratories/laboratoriesService.api";
+import Header from "../../components/Header/Header";
 
 export default function Users() {
   const [rows, setRows] = useState([]);
@@ -439,27 +440,18 @@ export default function Users() {
 
   return (
     <div>
-      <div className={styles["header-wrapper"]}>
-        {!isMobile && (
-          <div className={styles["header-img-wrapper"]}>
-            <img src={profileAccessImg} />
-          </div>
-        )}
-        <div className={styles["header-content-wrapper"]}>
-          <h1 className={styles["access-title"]}>Usuários</h1>
-          <p className={styles["access-subtitle"]}>
-            Gerencie usuários, perfis e acessos do sistema
-          </p>
-        </div>
-      </div>
-
+      <Header
+        img={usersImg}
+        title="Usuários"
+        subtitle="Gerencie usuários, perfis e acessos do sistema"
+      />
       <div className="grid-wrapper">
         <div className="grid-header-wrapper">
           <input
             type="text"
-            className={styles["access-search"]}
+            className={styles["user-search"]}
             placeholder="Buscar usuário..."
-            name="users-search"
+            name="user-search"
           />
           {!isMobile && (
             <Tooltip content="Todos os perfis">
@@ -514,7 +506,7 @@ export default function Users() {
           )}
           {!isMobile && (
             <button
-              className={styles["btn-new-profile"]}
+              className={styles["btn-new-user"]}
               onClick={onOpenNew}
               type="button"
             >
@@ -540,9 +532,9 @@ export default function Users() {
       </div>
 
       {isMobile && (
-        <div className={styles["wrapper-btn-new-profile-mobile"]}>
+        <div className={styles["wrapper-btn-new-user-mobile"]}>
           <button
-            className={styles["btn-new-profile-mobile"]}
+            className={styles["btn-new-user-mobile"]}
             onClick={onOpenNew}
             type="button"
           >

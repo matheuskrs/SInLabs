@@ -18,6 +18,7 @@ import {
   getSystemCategories,
 } from "~/services/Systems/systemsService.api";
 import SystemCard from "~/components/SystemCard/SystemCard";
+import Header from "../../components/Header/Header";
 
 export default function Systems() {
   const isMobile = useMediaQuery("(max-width:700px)");
@@ -181,22 +182,13 @@ export default function Systems() {
 
   return (
     <div>
-      <div className={styles["header-wrapper"]}>
-        {!isMobile && (
-          <div className={styles["header-img-wrapper"]}>
-            <img src={systemImg} />
-          </div>
-        )}
-        <div className={styles["header-content-wrapper"]}>
-          <h1 className={styles["systems-title"]}>Sistemas</h1>
-          <p className={styles["systems-subtitle"]}>
-            Gerencie os sistemas disponíveis
-          </p>
-        </div>
-      </div>
-
+      <Header
+        img={systemImg}
+        title="Sistemas"
+        subtitle="Gerencie os sistemas disponíveis"
+      />
       <div className={styles["sys-card-wrapper"]}>
-        <div className={styles["grid-header-wrapper"]}>
+        <div className={styles["cards-header-wrapper"]}>
           <div className={styles["search-with-icon"]}>
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
@@ -245,7 +237,8 @@ export default function Systems() {
               <h3>Nenhum sistema encontrado</h3>
               <p>
                 Ainda não há sistemas cadastrados
-                {searchFilter ? " para esse filtro" : ""}. Clique em <strong>Novo sistema</strong> para adicionar o primeiro.
+                {searchFilter ? " para esse filtro" : ""}. Clique em
+                <strong>Novo sistema</strong> para adicionar o primeiro.
               </p>
             </div>
           ) : (

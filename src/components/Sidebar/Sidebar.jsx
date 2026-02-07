@@ -18,18 +18,20 @@ import {
   faNewspaper,
   faChartLine,
 } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useToast } from "~/providers/Toast/useToast";
 import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
 import Tooltip from "~/components/Tooltip/Tooltip";
 
-export default function Sidebar({ activePage }) {
+export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(true);
   const sidebarRef = useRef(null);
   const navigator = useNavigate();
   const toast = useToast();
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const { showLoading, hideLoading } = useGlobalLoading();
+  const { pathname } = useLocation();
+  const isActive = (path) => pathname.startsWith(path);
   const MENU_ITEMS = [
     {
       id: "access",
@@ -135,9 +137,9 @@ export default function Sidebar({ activePage }) {
             {MENU_ITEMS.map((item) => (
               <li
                 key={item.id}
-                className={activePage === item.id ? styles.active : ""}
+                className={isActive(item.path) ? styles.active : ""}
                 onClick={() =>
-                  activePage !== item.id && handleNavigate(item.path)
+                  !isActive(item.path) && handleNavigate(item.path)
                 }
               >
                 <Tooltip

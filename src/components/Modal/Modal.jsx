@@ -35,7 +35,8 @@ export default function Modal({ open, title, onClose, children }) {
     onClose();
   };
 
-  const content = typeof children === "function" ? children(handleClose) : children;
+  const content =
+    typeof children === "function" ? children(handleClose) : children;
 
   const onBackdropPointerDown = (e) => {
     startedOnBackdrop.current = e.target === e.currentTarget;

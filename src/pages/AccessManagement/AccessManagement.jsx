@@ -2,7 +2,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { ptBR } from "@mui/x-data-grid/locales";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
-import "~/components/CommonGridCSS/commonGrid.css";
+import "~/styles/commonGrid.css";
 import Modal from "~/components/Modal/Modal";
 import { useConfirm } from "~/components/ConfirmationDialog/UseConfirm";
 import styles from "./accessManagement.module.css";
@@ -13,8 +13,11 @@ import Tooltip from "~/components/Tooltip/Tooltip";
 import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
 import { useToast } from "~/providers/Toast/useToast";
 import profileAccessImg from "~/assets/AccessManagement/ProfileAccessImg.png";
-import { getAccessPermissions, getAccessProfiles } from "~/services/AccessManagement/accessService.api";
-
+import {
+  getAccessPermissions,
+  getAccessProfiles,
+} from "~/services/AccessManagement/accessService.api";
+import Header from "../../components/Header/Header";
 export default function AccessManagement() {
   const [rows, setRows] = useState([]);
   const [status, setStatus] = useState(0);
@@ -278,19 +281,11 @@ export default function AccessManagement() {
 
   return (
     <div>
-      <div className={styles["header-wrapper"]}>
-        {!isMobile && (
-          <div className={styles["header-img-wrapper"]}>
-            <img src={profileAccessImg} />
-          </div>
-        )}
-        <div className={styles["header-content-wrapper"]}>
-          <h1 className={styles["access-title"]}>Perfis de Acesso</h1>
-          <p className={styles["access-subtitle"]}>
-            Gerencie os perfis e permissões de acesso do sistema
-          </p>
-        </div>
-      </div>
+      <Header
+        img={profileAccessImg}
+        title="Perfis de Acesso"
+        subtitle="Gerencie os perfis e permissões de acesso do sistema"
+      />
       <div className="grid-wrapper">
         <div className="grid-header-wrapper">
           <input

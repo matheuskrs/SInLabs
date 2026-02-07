@@ -17,6 +17,7 @@ import {
   getLaboratoryStatus,
 } from "../../services/Laboratories/laboratoriesService.api";
 import LaboratoryCard from "../../components/LaboratoryCard/LaboratoryCard";
+import Header from "../../components/Header/Header";
 
 export default function Laboratories() {
   const isMobile = useMediaQuery("(max-width:700px)");
@@ -276,22 +277,13 @@ export default function Laboratories() {
 
   return (
     <div>
-      <div className={styles["header-wrapper"]}>
-        {!isMobile && (
-          <div className={styles["header-img-wrapper"]}>
-            <img src={laboratoryImg} />
-          </div>
-        )}
-        <div className={styles["header-content-wrapper"]}>
-          <h1 className={styles["laboratories-title"]}>Laboratórios</h1>
-          <p className={styles["laboratories-subtitle"]}>
-            Gerencie os laboratórios do sistema
-          </p>
-        </div>
-      </div>
-
+      <Header
+        img={laboratoryImg}
+        title="Laboratórios"
+        subtitle="Gerencie os laboratórios do sistema"
+      />
       <div className={styles["lab-card-wrapper"]}>
-        <div className={styles["grid-header-wrapper"]}>
+        <div className={styles["cards-header-wrapper"]}>
           <div className={styles["search-with-icon"]}>
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
@@ -351,7 +343,8 @@ export default function Laboratories() {
               <h3>Nenhum laboratório encontrado</h3>
               <p>
                 Ainda não há laboratórios cadastrados
-                {searchFilter ? " para esse filtro" : ""}. Clique em <strong>Novo laboratório</strong> para adicionar o primeiro.
+                {searchFilter ? " para esse filtro" : ""}. Clique em
+                <strong>Novo laboratório</strong> para adicionar o primeiro.
               </p>
             </div>
           ) : (
