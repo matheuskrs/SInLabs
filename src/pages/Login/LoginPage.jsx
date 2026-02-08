@@ -6,8 +6,10 @@ import { faCopy, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "~/providers/Toast/useToast";
 import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
+import { useMediaQuery } from "@mui/material";
 
 export default function LoginPage() {
+  const isMobile = useMediaQuery("(max-width:700px)");
   const { showLoading, hideLoading } = useGlobalLoading();
   const toast = useToast();
   const [showPassword, setShowPassword] = useState(false);
@@ -33,7 +35,8 @@ export default function LoginPage() {
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const isEmailValid = emailRegex.test(email);
-  const isFormValid = email.trim() !== "" && isEmailValid && password.trim() !== "";
+  const isFormValid =
+    email.trim() !== "" && isEmailValid && password.trim() !== "";
   const togglePassword = () => setShowPassword(!showPassword);
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const handleLogin = async (e) => {
@@ -42,7 +45,8 @@ export default function LoginPage() {
       if (!isFormValid) {
         let message = "Verifique os campos preenchidos e tente novamente.";
         if (!isEmailValid) {
-          message = "O formato do email está inválido, verifique e tente novamente.";
+          message =
+            "O formato do email está inválido, verifique e tente novamente.";
         }
         toast.error("Erro", message);
         return;
@@ -102,9 +106,11 @@ export default function LoginPage() {
             autoComplete="current-password"
             maxLength={150}
           />
-          <span className={styles["toggle-caps"]}>
-            {capsLockOn ? "A" : "a"}
-          </span>
+          {!isMobile && (
+            <span className={styles["toggle-caps"]}>
+              {capsLockOn ? "A" : "a"}
+            </span>
+          )}
           <span className={styles["toggle-password"]} onClick={togglePassword}>
             <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
           </span>
