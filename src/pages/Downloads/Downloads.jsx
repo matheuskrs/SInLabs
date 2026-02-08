@@ -36,6 +36,29 @@ export default function Downloads() {
     loadSystemCategories();
   }, []);
 
+  function parseSizeToBytes(size) {
+    if (!size) return Number.POSITIVE_INFINITY;
+
+    const s = String(size).trim().toLowerCase();
+
+    const match = s.match(/([\d.,]+)\s*(b|kb|mb|gb|tb)?/i);
+    if (!match) return Number.POSITIVE_INFINITY;
+
+    const raw = match[1].replace(",", ".");
+    const value = Number(raw);
+    if (!Number.isFinite(value)) return Number.POSITIVE_INFINITY;
+
+    const unit = (match[2] || "b").toLowerCase();
+    const multipliers = {
+      b: 1,
+      kb: 1024,
+      mb: 1024 ** 2,
+      gb: 1024 ** 3,
+      tb: 1024 ** 4,
+    };
+
+    return value * (multipliers[unit] ?? 1);
+  }
   const filteredSystems = useMemo(() => {
     const term = (searchFilter || "").trim().toLowerCase();
 
@@ -53,11 +76,13 @@ export default function Downloads() {
   const orderedSystems = useMemo(() => {
     const data = [...filteredSystems];
 
-    switch (orderBy) {
-      case 1: // tamanho
-        return data.sort((a, b) => (a.size || "").localeCompare(b.size || ""));
-      case 2: // nome
+  switch (orderBy) {
+      case 1: // nome
         return data.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+      case 2: // tamanho
+        return data.sort(
+          (a, b) => parseSizeToBytes(a.size) - parseSizeToBytes(b.size),
+        );
       default:
         return data;
     }
@@ -120,9 +145,11 @@ export default function Downloads() {
               value={orderBy}
               onChange={(e) => setOrderBy(e.target.value)}
             >
-              <MenuItem value={0}>Ordenar por:</MenuItem>
-              <MenuItem value={1}>Tamanho</MenuItem>
-              <MenuItem value={2}>Nome</MenuItem>
+              <MenuItem value="" disabled>
+                Ordenar por
+              </MenuItem>
+              <MenuItem value={1}>Nome</MenuItem>
+              <MenuItem value={2}>Tamanho (menor para maior)</MenuItem>
             </Select>
           )}
         </div>
