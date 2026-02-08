@@ -244,8 +244,8 @@ export default function ProfileManagement() {
         ? "Perfil de acesso criado com sucesso!"
         : "Perfil de acesso atualizado com sucesso!";
     showLoading(mensagem);
+    setOpenModal(false);
     setTimeout(function () {
-      setOpenModal(false);
       hideLoading();
       toast.success("Sucesso", mensagemSucesso);
     }, 1000);

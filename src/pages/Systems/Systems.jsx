@@ -139,6 +139,8 @@ export default function Systems() {
   const onSubmitModal = async (e) => {
     e.preventDefault();
     showLoading(systemId == 0 ? "Criando Sistema" : "Editando sistema");
+    await sleep(100);
+    setOpenModal(false);
     await sleep(1500);
     hideLoading();
     toast.success(
@@ -147,7 +149,6 @@ export default function Systems() {
         ? "Sistema criado com sucesso!"
         : "Sistema editado com sucesso!",
     );
-    setOpenModal(false);
   };
 
   const requestSysRemoval = async (sys) => {

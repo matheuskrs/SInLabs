@@ -179,9 +179,9 @@ export default function Laboratories() {
 
   const onSubmitModal = async (e) => {
     e.preventDefault();
-    showLoading(
-      laboratoryId == 0 ? "Criando Laboratório" : "Editando laboratório",
-    );
+    showLoading(laboratoryId == 0 ? "Criando Laboratório" : "Editando laboratório");
+    await sleep(100);
+    setOpenModal(false);
     await sleep(1500);
     hideLoading();
     toast.success(
@@ -190,7 +190,6 @@ export default function Laboratories() {
         ? "Laboratório criado com sucesso!"
         : "Laboratório editado com sucesso!",
     );
-    setOpenModal(false);
   };
 
   const requestLabRemoval = async (lab) => {
