@@ -18,7 +18,7 @@ import {
   getSystemCategories,
 } from "~/services/Systems/systemsService.api";
 import SystemCard from "~/components/SystemCard/SystemCard";
-import Header from "../../components/Header/Header";
+import Header from "~/components/Header/Header";
 
 export default function Systems() {
   const isMobile = useMediaQuery("(max-width:700px)");

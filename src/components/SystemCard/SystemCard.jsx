@@ -16,9 +16,11 @@ export default function SystemCard({ sys, onEdit, onRemove }) {
 
         <div className={styles["system-card-main"]}>
           <div className={styles["system-card-title-row"]}>
-            <Tooltip content={sys.name} disabled={!isMobile}>
-              <h3 className={styles["system-name"]}>{sys.name}</h3>
-            </Tooltip>
+            <div className={styles["system-name"]}>
+              <Tooltip content={sys.name} disabled={!isMobile}>
+                <h3>{sys.name}</h3>
+              </Tooltip>
+            </div>
           </div>
           <div className={styles["system-version"]}>
             <span>Versão {sys.version}</span>
