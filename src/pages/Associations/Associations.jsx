@@ -10,6 +10,7 @@ import { getUsers } from "~/services/Users/usersService.api";
 import { getAccessProfiles } from "~/services/ProfileManagement/profileAccessService.api";
 import { getSystems } from "~/services/Systems/systemsService.api";
 import { useConfirm } from "~/components/ConfirmationDialog/UseConfirm";
+import { useToast } from "~/providers/Toast/useToast";
 
 export default function Associations() {
   const [users, setUsers] = useState([]);
@@ -23,6 +24,7 @@ export default function Associations() {
   const [selectedLaboratory, setSelectedLaboratory] = useState(null);
   const [selectedSystem, setSelectedSystem] = useState(null);
   const { confirm, ConfirmDialog } = useConfirm();
+  const toast = useToast();
   const canConfirm =
     !!selectedUser &&
     !!selectedProfile &&
@@ -50,15 +52,14 @@ export default function Associations() {
   const onConfirmAssociation = async () => {
     const ok = await confirm({
       title: "Atenção",
-      message: `Tem certeza que deseja associar esse usuário às permissões escolhidas?`,
+      message: `Tem certeza que deseja associar "${selectedUser.name}" às permissões escolhidas?`,
     });
     if (!ok) return;
-    console.log({
-      user: selectedUser,
-      profile: selectedProfile,
-      laboratory: selectedLaboratory,
-      system: selectedSystem,
-    });
+    toast.success(
+      "Sucesso",
+      `Associação realizada com sucesso para "${selectedUser.name}".`,
+      10000,
+    );
   };
 
   const onSelectUser = (user) => {
@@ -184,7 +185,8 @@ export default function Associations() {
 
             {!selectedUser ? (
               <p className={styles["empty-text"]}>
-                Nenhum laboratório existente, selecione um usuário para começar a selecionar
+                Nenhum laboratório existente, selecione um usuário para começar
+                a selecionar
               </p>
             ) : selectedUser.laboratories?.length === 0 ? (
               <p className={styles["empty-text"]}>
