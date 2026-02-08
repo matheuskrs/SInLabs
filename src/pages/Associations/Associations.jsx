@@ -214,9 +214,7 @@ export default function Associations() {
               {systems.map((sys) => (
                 <li
                   key={sys.id}
-                  className={
-                    selectedSystem?.id === sys.id ? styles["active"] : ""
-                  }
+                  className={selectedSystem?.id === sys.id ? styles["active"] : ""}
                   onClick={() => setSelectedSystem(sys)}
                 >
                   {sys.name}
