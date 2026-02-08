@@ -1,11 +1,11 @@
 .container {
   display: flex;
   flex-direction: column;
-  padding: 40px 0px 20px 120px;
+  padding: 40px 5px 20px 120px;
 }
 
 @media (max-width: 700px) {
   .container {
-    padding: 40px 0px 0px 100px;
+    padding: 40px 5px 0px 100px;
   }
 }
