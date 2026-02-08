@@ -185,12 +185,11 @@ export default function Associations() {
 
             {!selectedUser ? (
               <p className={styles["empty-text"]}>
-                Nenhum laboratório existente, selecione um usuário para começar
-                a selecionar
+                Nenhum laboratório existente, selecione um usuário para visualizar seus laboratórios disponíveis.
               </p>
             ) : selectedUser.laboratories?.length === 0 ? (
               <p className={styles["empty-text"]}>
-                Nenhum laboratório existente para o usuário selecionado
+                Este usuário não possui laboratórios associados.
               </p>
             ) : (
               <ul className={styles["selectable-list"]}>
