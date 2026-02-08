@@ -6,7 +6,7 @@
   flex-direction: column;
   gap: 10px;
   z-index: 10000;
-  align-items:end;
+  align-items: end;
 }
 
 .toast button {
@@ -32,6 +32,8 @@
   align-items: flex-start;
   animation: slideIn 0.3s ease forwards;
   flex-direction: column;
+  will-change: transform;
+  user-select: none;
 }
 
 .toast-message {
@@ -53,6 +55,10 @@
 
 .toast.leaving {
   animation: slideOut 0.3s ease forwards;
+}
+
+.toast.dragging {
+  animation: none !important;
 }
 
 @keyframes slideIn {
