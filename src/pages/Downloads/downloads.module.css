@@ -15,7 +15,6 @@
   gap: 10px;
   align-items: center;
   padding: 10px;
-  margin-bottom: 12px;
   flex-wrap: nowrap;
   position: sticky;
   background: #fff;
@@ -72,10 +71,10 @@
   gap: 10px;
   padding: 10px;
   justify-content: start;
-  max-height: 550px;
   overflow-y: auto;
   flex: 0 0 auto;
-  min-height: auto;
+  max-height: 650px;
+  min-height: 0;
 }
 
 .empty-state {
@@ -112,7 +111,6 @@
   gap: 10px;
   padding: 12px;
   border-top: 1px solid rgba(230, 230, 230, 0.7);
-  margin-top: 12px;
   flex-wrap: wrap;
   position: sticky;
   background-color: white;
@@ -147,8 +145,10 @@
   }
 
   .cards-container {
-    grid-template-columns: 1fr;
+    display:block;
+    flex: 1 1 auto;
   }
+
   .empty-state {
     width: 90% !important;
   }

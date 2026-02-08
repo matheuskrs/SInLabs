@@ -118,7 +118,7 @@ export default function Downloads() {
               className={styles["select-filter"]}
               size="small"
               value={orderBy}
-              onChange={setOrderBy}
+              onChange={(e) => setOrderBy(e.target.value)}
             >
               <MenuItem value={0}>Ordenar por:</MenuItem>
               <MenuItem value={1}>Tamanho</MenuItem>
