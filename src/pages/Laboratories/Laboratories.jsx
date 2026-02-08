@@ -338,27 +338,24 @@ export default function Laboratories() {
         </div>
 
         <div className={styles["cards-container"]}>
-          {pagedLaboratories.length === 0 ? (
-            <div className={styles["empty-state"]}>
-              <h3>Nenhum laboratório encontrado</h3>
-              <p>
-                Ainda não há laboratórios cadastrados
-                {searchFilter ? " para esse filtro" : ""}. Clique em
-                <strong>Novo laboratório</strong> para adicionar o primeiro.
-              </p>
-            </div>
-          ) : (
-            pagedLaboratories.map((lab) => (
-              <LaboratoryCard
-                key={lab.id}
-                lab={lab}
-                onEdit={onOpenEdit}
-                onRemove={requestLabRemoval}
-              />
-            ))
-          )}
+          {pagedLaboratories.map((lab) => (
+            <LaboratoryCard
+              key={lab.id}
+              lab={lab}
+              onEdit={onOpenEdit}
+              onRemove={requestLabRemoval}
+            />
+          ))}
         </div>
-
+        {pagedLaboratories.length === 0 ? (
+          <div className={styles["empty-state"]}>
+            <h3>Nenhum laboratório encontrado</h3>
+            <p>
+              Ainda não há laboratórios cadastrados
+              {searchFilter ? " para esse filtro" : ""}.
+            </p>
+          </div>
+        ) : null}
         <div className={styles["pagination-wrapper"]}>
           <div className={styles["pagination-left"]}>
             Itens por página:

@@ -232,27 +232,24 @@ export default function Systems() {
         </div>
 
         <div className={styles["cards-container"]}>
-          {pagedSystems.length === 0 ? (
-            <div className={styles["empty-state"]}>
-              <h3>Nenhum sistema encontrado</h3>
-              <p>
-                Ainda não há sistemas cadastrados
-                {searchFilter ? " para esse filtro" : ""}. Clique em
-                <strong>Novo sistema</strong> para adicionar o primeiro.
-              </p>
-            </div>
-          ) : (
-            pagedSystems.map((sys) => (
-              <SystemCard
-                key={sys.id}
-                sys={sys}
-                onEdit={onOpenEdit}
-                onRemove={requestSysRemoval}
-              />
-            ))
-          )}
+          {pagedSystems.map((sys) => (
+            <SystemCard
+              key={sys.id}
+              sys={sys}
+              onEdit={onOpenEdit}
+              onRemove={requestSysRemoval}
+            />
+          ))}
         </div>
-
+        {pagedSystems.length === 0 ? (
+          <div className={styles["empty-state"]}>
+            <h3>Nenhum sistema encontrado</h3>
+            <p>
+              Ainda não há sistemas cadastrados
+              {searchFilter ? " para esse filtro" : ""}.
+            </p>
+          </div>
+        ) : null}
         <div className={styles["pagination-wrapper"]}>
           <div className={styles["pagination-left"]}>
             Itens por página:
