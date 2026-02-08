@@ -19,7 +19,7 @@ export default function Downloads() {
   const [searchFilter, setSearchFilter] = useState("");
   const [systemCategories, setSystemCategories] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState(0);
-  const [orderBy, setOrderBy] = useState(0);
+  const [orderBy, setOrderBy] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const page = 1;
   useEffect(() => {

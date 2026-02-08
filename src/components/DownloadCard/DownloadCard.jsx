@@ -53,15 +53,13 @@ export default function DownloadCard({ sys }) {
             onClick={onDownload}
           >
             <FontAwesomeIcon icon={faDownload} />
-            Download
+            Baixar
           </button>
 
           <button
             type="button"
             className={styles["download-card-btn-changelog"]}
             onClick={onChangelog}
-            aria-label="Ver changelog"
-            title="Changelog"
           >
             <FontAwesomeIcon icon={faFileLines} />
           </button>
