@@ -181,19 +181,30 @@ export default function Associations() {
 
           <div className={styles["association-card"]}>
             <h3>Laboratórios</h3>
-            <ul className={styles["selectable-list"]}>
-              {(selectedUser?.laboratories || []).map((lab) => (
-                <li
-                  key={lab.id}
-                  className={
-                    selectedLaboratory?.id === lab.id ? styles["active"] : ""
-                  }
-                  onClick={() => setSelectedLaboratory(lab)}
-                >
-                  {lab.name}
-                </li>
-              ))}
-            </ul>
+
+            {!selectedUser ? (
+              <p className={styles["empty-text"]}>
+                Nenhum laboratório existente, selecione um usuário para começar a selecionar
+              </p>
+            ) : selectedUser.laboratories?.length === 0 ? (
+              <p className={styles["empty-text"]}>
+                Nenhum laboratório existente para o usuário selecionado
+              </p>
+            ) : (
+              <ul className={styles["selectable-list"]}>
+                {selectedUser.laboratories.map((lab) => (
+                  <li
+                    key={lab.id}
+                    className={
+                      selectedLaboratory?.id === lab.id ? styles["active"] : ""
+                    }
+                    onClick={() => setSelectedLaboratory(lab)}
+                  >
+                    {lab.name}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <div className={styles["association-card"]}>
