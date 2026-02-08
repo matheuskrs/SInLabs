@@ -1,0 +1,155 @@
+.sys-card-wrapper {
+  background-color: white;
+  border-radius: 10px;
+  margin-right: 30px;
+  border: 1px solid rgba(230, 230, 230, 0.7);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+  max-width: 2000px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.cards-header-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 12px;
+  flex-wrap: nowrap;
+  position: sticky;
+  background: #fff;
+  z-index: 1;
+}
+
+.search-with-icon {
+  position: relative;
+  flex: 2 1 0%;
+  min-width: 0;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: #777;
+}
+
+.systems-search {
+  width: 100%;
+  padding: 11px 14px 11px 36px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fff;
+}
+
+.systems-search:focus {
+  outline: none;
+  border-color: var(--main-color);
+}
+
+.select-filter {
+  flex: 1 1 0%;
+  min-width: 0;
+  max-width: none;
+  border-radius: 6px;
+  font-size: 14px;
+  color: gray;
+  border: 2px solid #ddd;
+  background: #fff;
+}
+
+.select-filter * {
+  border: none !important;
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 360px));
+  gap: 10px;
+  padding: 10px;
+  justify-content: start;
+  max-height: 550px;
+  overflow-y: auto;
+  flex: 0 0 auto;
+  min-height: auto;
+}
+
+.empty-state {
+  padding: 28px 14px;
+  border: 2px dashed #ddd;
+  border-radius: 10px;
+  color: var(--tertiary-color-text);
+  background: #fff;
+  width: 98%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+}
+
+.empty-state h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.pagination-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-top: 1px solid rgba(230, 230, 230, 0.7);
+  margin-top: 12px;
+  flex-wrap: wrap;
+  position: sticky;
+  background-color: white;
+  bottom: 0;
+}
+
+.pagination-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+.pagination-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 700px) {
+  .sys-card-wrapper {
+    margin-right: 0;
+    padding-top: 0;
+    margin-right: 5px;
+    margin-bottom: 20px;
+    max-height: calc(100dvh - 233px);
+  }
+
+  .cards-header-wrapper {
+    margin: 0;
+  }
+
+  .cards-container {
+    grid-template-columns: 1fr;
+  }
+  .empty-state {
+    width: 90% !important;
+  }
+}
