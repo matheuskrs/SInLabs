@@ -4,15 +4,21 @@ import {
   faHeart,
   faShare,
   faQuestionCircle,
+  faCopy,
 } from "@fortawesome/free-solid-svg-icons";
 import { useMediaQuery, CircularProgress } from "@mui/material";
 import Tooltip from "~/components/Tooltip/Tooltip";
 import styles from "./feedPost.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { getPostComments } from "~/services/Feed/feedService.api";
+import {
+  getPostComments,
+  getShareUrlForPost,
+} from "~/services/Feed/feedService.api";
 import { useToast } from "~/providers/Toast/useToast";
 import FeedComment from "~/components/FeedComment/FeedComent";
+import Modal from "~/components/Modal/Modal";
+import { formatRelativeDate } from "~/utils/date";
 
 export default function FeedPost({ post }) {
   const isVerySmall = useMediaQuery("(max-width:400px)");
@@ -22,6 +28,9 @@ export default function FeedPost({ post }) {
   const [isLoadingComments, setIsLoadingComments] = useState(false);
   const [comments, setComments] = useState(null);
 
+  const [openShareModal, setOpenShareModal] = useState(false);
+  const [shareUrl, setShareUrl] = useState("");
+
   async function handleToggleComments() {
     const willOpen = !isCommentsOpen;
     setIsCommentsOpen(willOpen);
@@ -30,7 +39,6 @@ export default function FeedPost({ post }) {
 
     try {
       setIsLoadingComments(true);
-
       const data = await getPostComments(post.id);
       setComments(data);
     } catch (err) {
@@ -41,8 +49,34 @@ export default function FeedPost({ post }) {
     }
   }
 
+  function openShare() {
+    const url = getShareUrlForPost(post.id);
+
+    if (!url) {
+      toast.error("Erro", "Não foi possível gerar o link de compartilhamento");
+      return;
+    }
+
+    setShareUrl(url);
+    setOpenShareModal(true);
+  }
+
+  async function copyShare() {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      toast.success("Sucesso", "Link copiado para a área de transferência!");
+    } catch {
+      toast.error(
+        "Erro",
+        "Ocorreu um erro ao copiar o texto para a área de transferência.",
+      );
+    }
+  }
   return (
-    <div className={styles["post-wrapper"]} id={post?.isSharedPost ? "shared-post" : undefined}>
+    <div
+      className={styles["post-wrapper"]}
+      id={post?.isSharedPost ? "shared-post" : undefined}
+    >
       {post?.isSharedPost ? (
         <div className={styles["shared-banner"]}>Post compartilhado</div>
       ) : null}
@@ -76,7 +110,7 @@ export default function FeedPost({ post }) {
             </div>
 
             <div className={styles["post-creation-date"]}>
-              {post ? post.createdAt : ""}
+              {post ? formatRelativeDate(post.createdAt) : ""}
             </div>
           </div>
         </div>
@@ -111,24 +145,28 @@ export default function FeedPost({ post }) {
 
       <div className={styles["post-footer"]}>
         <div className={styles["footer-actions"]}>
-          <button className={styles["footer-action"]}>
-            <FontAwesomeIcon icon={faHeart} />
-            <span>{post?.likesCount ?? 12}</span>
-          </button>
-
-          <button
-            type="button"
-            className={styles["footer-action"]}
-            onClick={handleToggleComments}
-            aria-expanded={isCommentsOpen}
-          >
-            <FontAwesomeIcon icon={faCommentDots} />
-            <span>{post?.commentsCount ?? 4}</span>
-          </button>
-
-          <button className={styles["footer-action"]}>
-            <FontAwesomeIcon icon={faShare} />
-          </button>
+          <Tooltip content="Curtir" placement="top">
+            <button className={styles["footer-action"]}>
+              <FontAwesomeIcon icon={faHeart} />
+              <span>{post?.likesCount ?? 12}</span>
+            </button>
+          </Tooltip>
+          <Tooltip content="Comentar" placement="top">
+            <button
+              type="button"
+              className={styles["footer-action"]}
+              onClick={handleToggleComments}
+              aria-expanded={isCommentsOpen}
+            >
+              <FontAwesomeIcon icon={faCommentDots} />
+              <span>{post?.commentsCount ?? 4}</span>
+            </button>
+          </Tooltip>
+          <Tooltip content="Compartilhar" placement="top">
+            <button className={styles["footer-action"]} onClick={openShare}>
+              <FontAwesomeIcon icon={faShare} />
+            </button>
+          </Tooltip>
         </div>
 
         {isCommentsOpen && (
@@ -151,6 +189,37 @@ export default function FeedPost({ post }) {
           </div>
         )}
       </div>
+
+      <Modal
+        open={openShareModal}
+        title="Compartilhar"
+        onClose={() => setOpenShareModal(false)}
+      >
+        <div className={styles["share-modal"]}>
+          <div className={styles["share-modal-title"]}>
+            Compartilhe o seu post!
+          </div>
+
+          <div className={styles["share-modal-wrapper"]}>
+            <input
+              id={`share-input-${post?.id}`}
+              type="text"
+              value={shareUrl}
+              readOnly
+              className={styles["share-modal-input"]}
+            />
+            <Tooltip content="Copiar" placement="top" asChild>
+              <button
+                type="button"
+                onClick={copyShare}
+                className={styles["share-modal-copy"]}
+              >
+                <FontAwesomeIcon icon={faCopy} />
+              </button>
+            </Tooltip>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

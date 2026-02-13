@@ -30,6 +30,7 @@ export default function Feed() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(0);
   const { showLoading, hideLoading } = useGlobalLoading();
   const notifiedRef = useRef(false);
+  const scrolledToSharedRef = useRef(false);
 
   useEffect(() => {
     async function loadData() {
@@ -65,7 +66,14 @@ export default function Feed() {
   }, [search, showLoading, hideLoading, toast]);
 
   useEffect(() => {
+    const shareGuid = extractShareGuidFromSearch(search);
+
+    if (!shareGuid) return;
     if (!sharedPost?.isSharedPost) return;
+    if (scrolledToSharedRef.current) return;
+
+    scrolledToSharedRef.current = true;
+
     requestAnimationFrame(() => {
       const el = document.getElementById("shared-post");
       if (!el) return;
@@ -74,11 +82,12 @@ export default function Feed() {
       el.classList.remove("sharedFlash");
       void el.offsetWidth;
       el.classList.add("sharedFlash");
+
       setTimeout(() => {
         el.classList.remove("sharedFlash");
       }, 2000);
     });
-  }, [sharedPost]);
+  }, [sharedPost, search]);
   const mergedPosts = useMemo(() => {
     if (!sharedPost) return posts ?? [];
     const rest = (posts ?? []).filter((p) => p.id !== sharedPost.id);
@@ -87,13 +96,21 @@ export default function Feed() {
 
   const filteredPosts = useMemo(() => {
     return mergedPosts.filter((post) => {
-      const matchLab =
-        selectedLabId === 0 || post?.targetedLaboratory?.id === selectedLabId;
+      if (post?.isSharedPost) return true;
 
       const matchCategory =
         selectedCategoryId === 0 || post?.category?.id === selectedCategoryId;
 
-      return matchLab && matchCategory;
+      if (!matchCategory) return false;
+
+      const isForAllLabs = !post?.targetedLaboratory?.id;
+
+      const matchLab =
+        selectedLabId === 0 ||
+        isForAllLabs ||
+        post?.targetedLaboratory?.id === selectedLabId;
+
+      return matchLab;
     });
   }, [mergedPosts, selectedLabId, selectedCategoryId]);
 
