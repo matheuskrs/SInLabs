@@ -55,3 +55,25 @@ body {
 *::-webkit-scrollbar-corner {
   background: transparent;
 }
+
+.sharedFlash {
+  animation: sharedFlash 1s linear;
+}
+
+@keyframes sharedFlash {
+  0% {
+    border-color: transparent;
+  }
+  25% {
+    border-color: var(--main-color);
+  }
+  50% {
+    border-color: transparent;
+  }
+  75% {
+    border-color: var(--main-color);
+  }
+  100% {
+    border-color: transparent;
+  }
+}

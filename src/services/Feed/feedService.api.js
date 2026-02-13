@@ -15,7 +15,26 @@ export async function getFeedCategories() {
   ];
 }
 
-export async function getFeed() {
+function getSharesDb() {
+  return [
+    {
+      id: 1,
+      postId: 1,
+      userId: 2,
+      shareGuid: "7c4f260ce55e44b6b9a2cd60c618ee55",
+      sharedTimes: null,
+    },
+    {
+      id: 2,
+      postId: 2,
+      userId: 1,
+      shareGuid: "f46804faeb804b74943d72da568aee05",
+      sharedTimes: null,
+    },
+  ];
+}
+
+function getPostsDb() {
   return [
     {
       id: 1,
@@ -93,6 +112,38 @@ export async function getFeed() {
       isLikedByMe: false,
     },
   ];
+}
+
+export async function getFeed() {
+  return getPostsDb();
+}
+
+export async function getPostById(postId) {
+  const posts = getPostsDb();
+  return posts.find((p) => p.id === postId) ?? null;
+}
+
+export async function getShareByGuid(shareGuid) {
+  const shares = getSharesDb();
+  return shares.find((s) => s.shareGuid === shareGuid) ?? null;
+}
+
+export async function getSharedPostByGuid(shareGuid) {
+  const share = await getShareByGuid(shareGuid);
+  if (!share) return null;
+
+  const post = await getPostById(share.postId);
+  if (!post) return null;
+
+  return {
+    share,
+    post: { ...post, isSharedPost: true, sharedLabel: "Post compartilhado" },
+  };
+}
+
+export function extractShareGuidFromSearch(search) {
+  const params = new URLSearchParams(search || "");
+  return params.get("shared");
 }
 
 function getCommentsDb() {

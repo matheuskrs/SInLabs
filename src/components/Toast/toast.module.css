@@ -2,11 +2,12 @@
   position: fixed;
   top: 20px;
   right: 20px;
+  width: min(320px, calc(100vw - 40px));
   display: flex;
   flex-direction: column;
   gap: 10px;
   z-index: 10000;
-  align-items: end;
+  align-items: flex-end;
 }
 
 .toast button {
@@ -25,8 +26,8 @@
   border-radius: 6px;
   color: #fff;
   min-width: 240px;
-  max-width: 400px;
-  width: 90%;
+  width: 100%;
+  max-width: 100%;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
@@ -38,7 +39,7 @@
 
 .toast-message {
   word-break: break-word;
-  max-width: 400px;
+  white-space: pre-line;
 }
 
 .toast-success {

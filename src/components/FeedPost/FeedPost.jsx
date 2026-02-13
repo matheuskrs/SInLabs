@@ -42,7 +42,11 @@ export default function FeedPost({ post }) {
   }
 
   return (
-    <div className={styles["post-wrapper"]}>
+    <div className={styles["post-wrapper"]} id={post?.isSharedPost ? "shared-post" : undefined}>
+      {post?.isSharedPost ? (
+        <div className={styles["shared-banner"]}>Post compartilhado</div>
+      ) : null}
+
       <div className={styles["post-header"]}>
         <div className={styles["user-info"]}>
           <div className={styles["user-img-wrapper"]}>
