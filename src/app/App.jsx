@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { RouterProvider } from "react-router-dom";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-
+import { Analytics } from "@vercel/analytics/next";
 import { router } from "./router";
 import { ToastProvider } from "~/providers/Toast/ToastProvider";
 import ToastContainer from "~/components/Toast/ToastContainer";
