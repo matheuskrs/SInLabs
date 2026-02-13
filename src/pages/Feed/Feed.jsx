@@ -12,7 +12,9 @@ import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Select, MenuItem } from "@mui/material";
 
+import { useMediaQuery } from "@mui/material";
 export default function Feed() {
+  const isTablet = useMediaQuery("(max-width:1024px)");
   const [posts, setPosts] = useState([]);
   const [labs, setLabs] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -56,53 +58,104 @@ export default function Feed() {
         subtitle="Acompanhe as novidades e comunicados"
       />
 
-      <div className={styles["filters-card"]}>
-        <div className={styles["filters-header"]}>
-          <FontAwesomeIcon icon={faFilter} />
-          <span>Filtros</span>
-        </div>
-
-        <div className={styles["filters-fields"]}>
-          <div className={styles["filter-field"]}>
-            <label>Laboratório</label>
-            <Select
-              className={styles["select-filter"]}
-              size="small"
-              value={selectedLabId}
-              onChange={(e) => setSelectedLabId(e.target.value)}
-            >
-              <MenuItem value={0}>Todos</MenuItem>
-              {labs.map((lab) => (
-                <MenuItem key={lab.id} value={lab.id}>
-                  {lab.name}
-                </MenuItem>
-              ))}
-            </Select>
+      {isTablet && (
+        <div className={`${styles["filters-card"]} ${styles["highlight"]}`}>
+          <div className={styles["filters-header"]}>
+            <FontAwesomeIcon icon={faFilter} />
+            <span>Filtros</span>
           </div>
 
-          <div className={styles["filter-field"]}>
-            <label>Tipo</label>
-            <Select
-              className={styles["select-filter"]}
-              size="small"
-              value={selectedCategoryId}
-              onChange={(e) => setSelectedCategoryId(e.target.value)}
-            >
-              <MenuItem value={0}>Todos</MenuItem>
-              {categories.map((cat) => (
-                <MenuItem key={cat.id} value={cat.id}>
-                  {cat.name}
-                </MenuItem>
-              ))}
-            </Select>
+          <div className={styles["filters-fields"]}>
+            <div className={styles["filter-field"]}>
+              <label>Laboratório</label>
+              <Select
+                className={styles["select-filter"]}
+                size="small"
+                value={selectedLabId}
+                onChange={(e) => setSelectedLabId(e.target.value)}
+              >
+                <MenuItem value={0}>Todos</MenuItem>
+                {labs.map((lab) => (
+                  <MenuItem key={lab.id} value={lab.id}>
+                    {lab.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </div>
+
+            <div className={styles["filter-field"]}>
+              <label>Tipo</label>
+              <Select
+                className={styles["select-filter"]}
+                size="small"
+                value={selectedCategoryId}
+                onChange={(e) => setSelectedCategoryId(e.target.value)}
+              >
+                <MenuItem value={0}>Todos</MenuItem>
+                {categories.map((cat) => (
+                  <MenuItem key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      <div className={styles["feed-wrapper"]}>
-        {filteredPosts.length > 0
-          ? filteredPosts.map((post) => <FeedPost key={post.id} post={post} />)
-          : null}
+      <div className={styles["content"]}>
+        <div className={styles["feed-wrapper"]}>
+          {filteredPosts.length > 0
+            ? filteredPosts.map((post) => (
+                <FeedPost key={post.id} post={post} />
+              ))
+            : null}
+        </div>
+
+        {!isTablet && (
+          <div className={styles["filters-card"]}>
+            <div className={styles["filters-header"]}>
+              <FontAwesomeIcon icon={faFilter} />
+              <span>Filtros</span>
+            </div>
+
+            <div className={styles["filters-fields"]}>
+              <div className={styles["filter-field"]}>
+                <label>Laboratório</label>
+                <Select
+                  className={styles["select-filter"]}
+                  size="small"
+                  value={selectedLabId}
+                  onChange={(e) => setSelectedLabId(e.target.value)}
+                >
+                  <MenuItem value={0}>Todos</MenuItem>
+                  {labs.map((lab) => (
+                    <MenuItem key={lab.id} value={lab.id}>
+                      {lab.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </div>
+
+              <div className={styles["filter-field"]}>
+                <label>Tipo</label>
+                <Select
+                  className={styles["select-filter"]}
+                  size="small"
+                  value={selectedCategoryId}
+                  onChange={(e) => setSelectedCategoryId(e.target.value)}
+                >
+                  <MenuItem value={0}>Todos</MenuItem>
+                  {categories.map((cat) => (
+                    <MenuItem key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

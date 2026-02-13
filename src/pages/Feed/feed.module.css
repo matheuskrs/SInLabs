@@ -1,17 +1,24 @@
 .main {
   margin: 0 auto;
   width: 100%;
-  max-width: 750px;
+  max-width: 1200px;
+}
+.content {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
 }
 
 .filters-card {
+  flex-shrink: 0;
   background: #fff;
   border-radius: 10px;
   border: 1px solid rgba(230, 230, 230, 0.7);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
   padding: 14px;
-  margin-bottom: 14px;
-  margin-right: 30px;
+  width: 98%;
+  margin-bottom: 20px;
+  max-width: 280px;
 }
 
 .filters-header {
@@ -27,13 +34,15 @@
 .filters-fields {
   display: flex;
   gap: 12px;
+  flex-direction: column;
+  white-space: wrap;
 }
 
 .filter-field {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  flex: 1;
+  width: 100%;
 }
 
 .filter-field label {
@@ -60,7 +69,6 @@
 .feed-wrapper {
   background-color: #fff;
   border-radius: 10px;
-  margin-right: 30px;
   border: 1px solid rgba(230, 230, 230, 0.7);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
   display: flex;
@@ -75,13 +83,28 @@
   min-height: 0;
 }
 
-@media (max-width: 700px) {
-  .filters-fields {
-    flex-direction: column;
+@media (max-width: 1024px) {
+  .filters-card {
+    max-width: none;
   }
-  
+  .filters-fields {
+    flex-direction: row;
+  }
+  .filter-field{
+    width: 50%;
+  }
+  .feed-wrapper {
+    width:98%;
+  }
+}
+
+@media (max-width: 700px) {
   .filters-card {
     margin-right: 10px;
+  }
+
+  .filters-fields {
+    gap: 2px;
   }
 
   .feed-wrapper {
