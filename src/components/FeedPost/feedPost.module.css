@@ -163,6 +163,33 @@
 .footer-action span {
   font-weight: 500;
 }
+.comments-area {
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+.comments-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 52px;
+}
+
+.comments-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.comments-empty,
+.comments-error {
+  font-size: 13px;
+  color: #666;
+  padding: 8px 0;
+}
 
 @media (max-width: 700px) {
   .post-header {

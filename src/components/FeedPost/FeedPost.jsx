@@ -5,12 +5,41 @@ import {
   faShare,
   faQuestionCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { useMediaQuery } from "@mui/material";
+import { useMediaQuery, CircularProgress } from "@mui/material";
 import Tooltip from "~/components/Tooltip/Tooltip";
 import styles from "./feedPost.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
+import { getPostComments } from "~/services/Feed/feedService.api";
+import { useToast } from "~/providers/Toast/useToast";
+import FeedComment from "~/components/FeedComment/FeedComent";
+
 export default function FeedPost({ post }) {
   const isVerySmall = useMediaQuery("(max-width:400px)");
+  const toast = useToast();
+
+  const [isCommentsOpen, setIsCommentsOpen] = useState(false);
+  const [isLoadingComments, setIsLoadingComments] = useState(false);
+  const [comments, setComments] = useState(null);
+
+  async function handleToggleComments() {
+    const willOpen = !isCommentsOpen;
+    setIsCommentsOpen(willOpen);
+    if (!willOpen) return;
+    if (comments !== null) return;
+
+    try {
+      setIsLoadingComments(true);
+
+      const data = await getPostComments(post.id);
+      setComments(data);
+    } catch (err) {
+      toast.error("Erro", err);
+      setComments([]);
+    } finally {
+      setIsLoadingComments(false);
+    }
+  }
 
   return (
     <div className={styles["post-wrapper"]}>
@@ -22,12 +51,12 @@ export default function FeedPost({ post }) {
 
           <div className={styles["user-details"]}>
             <span className={styles["username"]}>
-              {post ? post.creatorName : "João Silva"}
+              {post ? post.creatorName : ""}
             </span>
 
             <div className={styles["user-lab-profile"]}>
               <span className={styles["user-profile"]}>
-                {post ? post.creatorProfile : "Coordenador"}
+                {post ? post.creatorProfile : ""}
               </span>
 
               <FontAwesomeIcon
@@ -43,7 +72,7 @@ export default function FeedPost({ post }) {
             </div>
 
             <div className={styles["post-creation-date"]}>
-              {post ? post.createdAt : "2025-10-22 10:30"}
+              {post ? post.createdAt : ""}
             </div>
           </div>
         </div>
@@ -66,11 +95,7 @@ export default function FeedPost({ post }) {
 
       <div className={styles["post-body"]}>
         <div className={styles["body-title"]}>
-          <p>
-            {post
-              ? post.text
-              : "Novo sistema acadêmico disponível! Acesse o portal e confira as novidades na gestão de matrículas."}
-          </p>
+          <p>{post ? post.text : ""}</p>
         </div>
 
         {post && post.postImg ? (
@@ -87,7 +112,12 @@ export default function FeedPost({ post }) {
             <span>{post?.likesCount ?? 12}</span>
           </button>
 
-          <button className={styles["footer-action"]}>
+          <button
+            type="button"
+            className={styles["footer-action"]}
+            onClick={handleToggleComments}
+            aria-expanded={isCommentsOpen}
+          >
             <FontAwesomeIcon icon={faCommentDots} />
             <span>{post?.commentsCount ?? 4}</span>
           </button>
@@ -96,6 +126,26 @@ export default function FeedPost({ post }) {
             <FontAwesomeIcon icon={faShare} />
           </button>
         </div>
+
+        {isCommentsOpen && (
+          <div className={styles["comments-area"]}>
+            {isLoadingComments ? (
+              <div className={styles["comments-loading"]}>
+                <CircularProgress size={18} />
+              </div>
+            ) : comments?.length ? (
+              <ul className={styles["comments-list"]}>
+                {comments.map((c) => (
+                  <FeedComment key={c.id} comment={c} postId={post.id} />
+                ))}
+              </ul>
+            ) : (
+              <div className={styles["comments-empty"]}>
+                Nenhum comentário foi encontrado. Seja o primeiro a comentar!
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

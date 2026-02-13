@@ -1,13 +1,13 @@
 import Header from "~/components/Header/Header";
 import feedImg from "~/assets/Feed/feedImg.png";
 import styles from "./feed.module.css";
-import FeedPost from "../../components/FeedPost/FeedPost";
+import FeedPost from "~/components/FeedPost/FeedPost";
 import { useEffect, useMemo, useState } from "react";
 import {
   getFeed,
   getFeedCategories,
-} from "../../services/Feed/feedService.api";
-import { getLaboratories } from "../../services/Laboratories/laboratoriesService.api";
+} from "~/services/Feed/feedService.api";
+import { getLaboratories } from "~/services/Laboratories/laboratoriesService.api";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Select, MenuItem } from "@mui/material";

@@ -1,10 +1,11 @@
-// feedService.api.js
 // import axios from "axios";
 
 import Avatar from "~/assets/Users/Avatar.jpg";
 import Avatar1 from "~/assets/Users/Avatar1.jpg";
 import Avatar2 from "~/assets/Users/Avatar2.jpg";
 import postImg1 from "~/assets/Feed/Post1.jpg";
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export async function getFeedCategories() {
   return [
     { id: 1, name: "Anúncio" },
@@ -15,9 +16,6 @@ export async function getFeedCategories() {
 }
 
 export async function getFeed() {
-  // const response = await axios.get("url");
-  // return response.data;
-
   return [
     {
       id: 1,
@@ -46,7 +44,7 @@ export async function getFeed() {
       text: "Novo sistema disponível para testes no ambiente interno. Caso identifique qualquer comportamento inesperado, reporte para a equipe técnica.",
       postImg: null,
       likesCount: 42,
-      commentsCount: 12,
+      commentsCount: 2,
       isLikedByMe: true,
     },
     {
@@ -76,7 +74,7 @@ export async function getFeed() {
       text: "Treinamento rápido amanhã sobre boas práticas no cadastro de usuários e organização dos laboratórios.",
       postImg: postImg1,
       likesCount: 25,
-      commentsCount: 6,
+      commentsCount: 2,
       isLikedByMe: false,
     },
     {
@@ -91,8 +89,113 @@ export async function getFeed() {
       text: "Ajuste no fluxo de autenticação: melhoria nos logs e tratamento mais claro de falhas de sessão.",
       postImg: null,
       likesCount: 14,
-      commentsCount: 2,
+      commentsCount: 1,
       isLikedByMe: false,
     },
   ];
+}
+
+function getCommentsDb() {
+  return {
+    1: [
+      {
+        id: 101,
+        parentCommentId: null,
+        mentionedUsername: null,
+        user: { id: 1, name: "Camila Alves", avatarUrl: Avatar },
+        text: "Sim! Aqui estabilizou bastante.",
+      },
+      {
+        id: 102,
+        parentCommentId: 101,
+        mentionedUsername: "Camila Alves",
+        user: { id: 3, name: "Ana Antunes", avatarUrl: Avatar2 },
+        text: "Que bom. Estava precisando mesmo!",
+      },
+      {
+        id: 103,
+        parentCommentId: 101,
+        mentionedUsername: "Ana Antunes",
+        user: { id: 2, name: "Thais Morais", avatarUrl: Avatar1 },
+        text: "Notaram melhora no tempo de carregamento?",
+      },
+    ],
+    2: [
+      {
+        id: 201,
+        parentCommentId: null,
+        mentionedUsername: null,
+        user: { id: 2, name: "Thais Morais", avatarUrl: Avatar1 },
+        text: "Vou testar hoje à noite!",
+      },
+      {
+        id: 202,
+        parentCommentId: 201,
+        mentionedUsername: "Thais Morais",
+        user: { id: 1, name: "Camila Alves", avatarUrl: Avatar },
+        text: "Fico no aguardo do feedback.",
+      },
+    ],
+    3: [
+      {
+        id: 301,
+        parentCommentId: null,
+        mentionedUsername: null,
+        user: { id: 1, name: "Camila Alves", avatarUrl: Avatar },
+        text: "Ok, avisarei o time.",
+      },
+    ],
+    4: [
+      {
+        id: 401,
+        parentCommentId: null,
+        mentionedUsername: null,
+        user: { id: 3, name: "Ana Antunes", avatarUrl: Avatar2 },
+        text: "O treinamento vai ser gravado?",
+      },
+      {
+        id: 402,
+        parentCommentId: 401,
+        mentionedUsername: "Ana Antunes",
+        user: { id: 2, name: "Thais Morais", avatarUrl: Avatar1 },
+        text: "Sim, mando o link no feed depois.",
+      },
+    ],
+    5: [
+      {
+        id: 501,
+        parentCommentId: null,
+        mentionedUsername: null,
+        user: { id: 1, name: "Camila Alves", avatarUrl: Avatar },
+        text: "Qualquer dúvida, estou a disposição!",
+      },
+    ],
+  };
+}
+
+export async function getPostComments(postId) {
+  await sleep(900);
+  const db = getCommentsDb();
+  const all = db[postId] ?? [];
+
+  const parents = all.filter((c) => c.parentCommentId === null);
+
+  const repliesCountByParentId = all.reduce((acc, c) => {
+    if (c.parentCommentId !== null) {
+      acc[c.parentCommentId] = (acc[c.parentCommentId] ?? 0) + 1;
+    }
+    return acc;
+  }, {});
+
+  return parents.map((p) => ({
+    ...p,
+    repliesCount: repliesCountByParentId[p.id] ?? 0,
+  }));
+}
+
+export async function getPostCommentReplies(postId, parentCommentId) {
+  await sleep(900);
+  const db = getCommentsDb();
+  const all = db[postId] ?? [];
+  return all.filter((c) => c.parentCommentId === parentCommentId);
 }
