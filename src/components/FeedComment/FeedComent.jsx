@@ -5,10 +5,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CircularProgress } from "@mui/material";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { getPostCommentReplies } from "~/services/Feed/feedService.api";
 import { useToast } from "~/providers/Toast/useToast";
 import styles from "./feedComment.module.css";
+import Tooltip from "~/components/Tooltip/Tooltip"
+const COMMENT_TRUNCATE_LIMIT = 100;
 
 export default function FeedComment({ comment, postId }) {
   const toast = useToast();
@@ -18,6 +20,16 @@ export default function FeedComment({ comment, postId }) {
   const [isRepliesOpen, setIsRepliesOpen] = useState(false);
   const [isLoadingReplies, setIsLoadingReplies] = useState(false);
   const [replies, setReplies] = useState(null);
+
+  const [expanded, setExpanded] = useState(false);
+
+  const text = comment?.text ?? "";
+  const isTruncated = text.length > COMMENT_TRUNCATE_LIMIT;
+
+  const displayedText = useMemo(() => {
+    if (expanded || !isTruncated) return text;
+    return text.slice(0, COMMENT_TRUNCATE_LIMIT).trim() + "…";
+  }, [expanded, isTruncated, text]);
 
   async function handleToggleReplies() {
     const willOpen = !isRepliesOpen;
@@ -37,6 +49,10 @@ export default function FeedComment({ comment, postId }) {
     }
   }
 
+  function handleToggleExpand() {
+    setExpanded((v) => !v);
+  }
+
   return (
     <li
       className={`${styles["comment-item"]} ${isReply ? styles["reply"] : ""} ${
@@ -49,6 +65,7 @@ export default function FeedComment({ comment, postId }) {
             <img
               className={styles["comment-avatar"]}
               src={comment.user.avatarUrl}
+              alt=""
             />
           ) : null}
         </div>
@@ -67,17 +84,30 @@ export default function FeedComment({ comment, postId }) {
             ) : null}
           </div>
 
-          <span className={styles["comment-text"]}>{comment.text}</span>
+          <span className={styles["comment-text"]}>{displayedText}</span>
+
+          {isTruncated ? (
+            <button
+              type="button"
+              className={styles["comment-see-more"]}
+              onClick={handleToggleExpand}
+            >
+              <strong>{expanded ? "Ver menos" : "Ver mais"}</strong>
+            </button>
+          ) : null}
 
           <div className={styles["comment-actions"]}>
-            <button className={styles["comment-action"]}>
-              <FontAwesomeIcon icon={faHeart} />
-              <span>{comment?.likesCount ?? 0}</span>
-            </button>
-
-            <button className={styles["comment-action"]}>
-              <FontAwesomeIcon icon={faCommentDots} />
-            </button>
+            <Tooltip content="Curtir" placement="top">
+              <button className={styles["comment-action"]}>
+                <FontAwesomeIcon icon={faHeart} />
+                <span>{comment?.likesCount ?? 0}</span>
+              </button>
+            </Tooltip>
+            <Tooltip content="Comentar" placement="top">
+              <button className={styles["comment-action"]}>
+                <FontAwesomeIcon icon={faCommentDots} />
+              </button>
+            </Tooltip>
           </div>
 
           {comment?.repliesCount > 0 ? (

@@ -3,5 +3,7 @@
   --main-color-text: white;
   --secondary-color: white;
   --secondary-color-text: black;
-  --tertiary-color-text:#64748B;
+  --tertiary-color-text: #64748b;
+  --thread-color: gainsboro;
+  --thread-w: 2px;
 }
