@@ -77,3 +77,12 @@ body {
     border-color: transparent;
   }
 }
+
+input {
+  transition: 150ms ease-in-out;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--main-color);
+}
