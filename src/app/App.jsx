@@ -1,10 +1,11 @@
+import { Suspense } from "react";
 import { RouterProvider } from "react-router-dom";
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+
 import { router } from "./router";
 import { ToastProvider } from "~/providers/Toast/ToastProvider";
 import ToastContainer from "~/components/Toast/ToastContainer";
-import { SuspenseGlobalLoadingFallback } from "~/providers/GlobalLoading/SuspenseGlobalLoadingFallback"; 
-import { Suspense } from "react";
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import { SuspenseGlobalLoadingFallback } from "~/providers/GlobalLoading/SuspenseGlobalLoadingFallback";
 
 export default function App() {
   return (

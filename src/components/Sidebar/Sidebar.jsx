@@ -109,9 +109,10 @@ export default function Sidebar() {
   };
 
   const handleNavigate = async (path) => {
-    showLoading("Carregando");
-    await sleep(300);
+    showLoading("Carregando página")
+    await sleep(600);
     navigator(path);
+    hideLoading();
   };
   return (
     <aside

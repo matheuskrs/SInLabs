@@ -3,12 +3,13 @@ import { lazy } from "react";
 
 const ErrorPage = lazy(() => import("~/pages/ErrorPage/ErrorPage"));
 const RootLayout = lazy(() => import("~/layouts/RootLayout/RootLayout"));
-
 const AuthLayout = lazy(() => import("~/layouts/Auth/AuthLayout"));
 const AppLayout = lazy(() => import("~/layouts/App/AppLayout"));
 
 const LoginPage = lazy(() => import("~/pages/Login/LoginPage"));
-const ProfileManagement = lazy(() => import("~/pages/ProfileManagement/ProfileManagement"));
+const ProfileManagement = lazy(
+  () => import("~/pages/ProfileManagement/ProfileManagement"),
+);
 const Laboratories = lazy(() => import("~/pages/Laboratories/Laboratories"));
 const Users = lazy(() => import("~/pages/Users/Users"));
 const Systems = lazy(() => import("~/pages/Systems/Systems"));

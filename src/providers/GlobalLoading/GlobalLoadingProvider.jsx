@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import GlobalLoadingOverlay from "./GlobalLoadingOverlay";
 import { GlobalLoadingContext } from "./GlobalLoadingContext";
 
 export function GlobalLoadingProvider({ children }) {
   const [visible, setVisible] = useState(false);
   const [text, setText] = useState("");
+
   const countRef = useRef(0);
   const baseTextRef = useRef("");
   const rafRef = useRef(null);
@@ -13,15 +14,15 @@ export function GlobalLoadingProvider({ children }) {
 
   const DOT_MS = 250;
 
-  const stopAnim = () => {
+  const stopAnim = useCallback(() => {
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
     }
     lastStepRef.current = -1;
-  };
+  }, []);
 
-  const startAnim = () => {
+  const startAnim = useCallback(() => {
     stopAnim();
     startRef.current = performance.now();
 
@@ -40,35 +41,41 @@ export function GlobalLoadingProvider({ children }) {
     };
 
     rafRef.current = requestAnimationFrame(tick);
-  };
+  }, [stopAnim]);
 
-  const showLoading = (loadingText = "") => {
-    countRef.current++;
-    setVisible(true);
+  const showLoading = useCallback(
+    (loadingText = "") => {
+      countRef.current++;
+      setVisible(true);
 
-    if (!loadingText) return;
-    if (baseTextRef.current === loadingText && rafRef.current) return;
+      if (!loadingText) return;
+      if (baseTextRef.current === loadingText && rafRef.current) return;
 
-    baseTextRef.current = loadingText;
-    setText(loadingText);
-    startAnim();
-  };
+      baseTextRef.current = loadingText;
+      setText(loadingText);
+      startAnim();
+    },
+    [startAnim],
+  );
 
-  const hideLoading = () => {
+  const hideLoading = useCallback(() => {
     if (countRef.current === 0) return;
     countRef.current--;
     if (countRef.current > 0) return;
 
     setVisible(false);
     stopAnim();
-  };
+  }, [stopAnim]);
 
-  useEffect(() => {
-    return () => stopAnim();
-  }, []);
+  useEffect(() => stopAnim, [stopAnim]);
+
+  const value = useMemo(
+    () => ({ showLoading, hideLoading }),
+    [showLoading, hideLoading],
+  );
 
   return (
-    <GlobalLoadingContext.Provider value={{ showLoading, hideLoading }}>
+    <GlobalLoadingContext.Provider value={value}>
       {children}
       <GlobalLoadingOverlay visible={visible} text={text} />
     </GlobalLoadingContext.Provider>
