@@ -14,6 +14,7 @@ export default function App() {
         <ToastProvider>
           <ToastContainer />
           <RouterProvider router={router} />
+          <Analytics />
         </ToastProvider>
       </TooltipPrimitive.Provider>
     </Suspense>
