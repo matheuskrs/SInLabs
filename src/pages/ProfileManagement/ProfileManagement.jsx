@@ -18,16 +18,19 @@ import {
   getAccessProfiles,
 } from "~/services/ProfileManagement/profileAccessService.api";
 import Header from "../../components/Header/Header";
+import { getProfileStatus } from "../../services/ProfileManagement/profileAccessService.api";
 export default function ProfileManagement() {
   const [rows, setRows] = useState([]);
   const [status, setStatus] = useState(0);
   const [openModal, setOpenModal] = useState(false);
+  const [search, setSearch] = useState("");
   const [profileId, setProfileId] = useState(0);
   const [profileName, setProfileName] = useState("");
   const [profileDescription, setProfileDescription] = useState("");
-  const [profileStatus, setProfileStatus] = useState(true);
+  const [profileStatus, setProfileStatus] = useState(1);
   const [permissions, setPermissions] = useState([]);
   const [profilePermissions, setProfilePermissions] = useState([]);
+  const [profileFilterStatus, setProfileFilterStatus] = useState([]);
   const { showLoading, hideLoading } = useGlobalLoading();
   const { confirm, ConfirmDialog } = useConfirm();
   const toast = useToast();
@@ -40,15 +43,35 @@ export default function ProfileManagement() {
       setPermissions(data);
     }
     loadPermissions();
-  }, []);
 
-  useEffect(() => {
     async function loadProfiles() {
       const data = await getAccessProfiles();
       setRows(data);
     }
     loadProfiles();
+
+    async function loadProfileStatus() {
+      const data = await getProfileStatus();
+      setProfileFilterStatus(data);
+    }
+    loadProfileStatus();
   }, []);
+  const filteredRows = useMemo(() => {
+    const s = String(search || "")
+      .toLowerCase()
+      .trim();
+    return (rows || []).filter((row) => {
+      if (s) {
+        const name = String(row?.name || "").toLowerCase();
+        if (!name.includes(s)) return false;
+      }
+      if (status !== 0) {
+        if (status != row?.profileStatusId) return false;
+      }
+
+      return true;
+    });
+  }, [rows, search, status]);
 
   const isMobile = useMediaQuery("(max-width:700px)");
   const desktopColumns = useMemo(
@@ -114,24 +137,23 @@ export default function ProfileManagement() {
         },
       },
       {
-        field: "status",
+        field: "profileStatusId",
         headerName: "Status",
         flex: 1,
         minWidth: 80,
         maxWidth: 160,
-        valueFormatter: (value) => (value ? "Ativo" : "Inativo"),
-
         renderCell: (params) => {
-          const isActive = Boolean(params.value);
-          const text = isActive ? "Ativo" : "Inativo";
+          const id = Number(params.value);
+          const st = profileFilterStatus.find((x) => x.id === id);
+
+          const text = st?.name ?? "-";
+          const color = st?.color ?? "#999";
 
           return (
             <Tooltip content={text} placement="top" disabled={false}>
               <span
                 className={styles["status-btn"]}
-                style={{
-                  backgroundColor: isActive ? "#24b92b" : "#fd2a2a",
-                }}
+                style={{ backgroundColor: color }}
               >
                 {text}
               </span>
@@ -147,13 +169,13 @@ export default function ProfileManagement() {
         filterable: false,
       },
     ],
-    [isMobile],
+    [isMobile, profileFilterStatus],
   );
 
   const mobileColumns = useMemo(
     () => [
       desktopColumns.find((col) => col.field === "name"),
-      desktopColumns.find((col) => col.field === "status"),
+      desktopColumns.find((col) => col.field === "profileStatusId"),
       desktopColumns.find((col) => col.field === "actions"),
     ],
     [desktopColumns],
@@ -163,7 +185,7 @@ export default function ProfileManagement() {
     setProfileId(0);
     setProfileName("");
     setProfileDescription("");
-    setProfileStatus(true);
+    setProfileStatus(1);
     setProfilePermissions([]);
     setOpenModal(true);
   };
@@ -172,7 +194,7 @@ export default function ProfileManagement() {
     setProfileId(row.id);
     setProfileName(row.name || "");
     setProfileDescription(row.description || "");
-    setProfileStatus(Boolean(row.status));
+    setProfileStatus(row?.profileStatusId);
     setProfilePermissions(row.permissions || []);
     setOpenModal(true);
   }, []);
@@ -293,6 +315,8 @@ export default function ProfileManagement() {
             className={styles["access-search"]}
             placeholder="Buscar perfil..."
             name="access-search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
           {!isMobile && (
             <Select
@@ -302,8 +326,13 @@ export default function ProfileManagement() {
               onChange={(e) => setStatus(e.target.value)}
             >
               <MenuItem value={0}>Todos os status</MenuItem>
-              <MenuItem value={1}>Ativo</MenuItem>
-              <MenuItem value={2}>Inativo</MenuItem>
+              {profileFilterStatus.map((status) => {
+                return (
+                  <MenuItem key={status.id} value={status.id}>
+                    {status.name}
+                  </MenuItem>
+                );
+              })}
             </Select>
           )}
           {!isMobile && (
@@ -314,7 +343,7 @@ export default function ProfileManagement() {
         </div>
         <DataGrid
           localeText={ptBR.components.MuiDataGrid.defaultProps.localeText}
-          rows={rows}
+          rows={filteredRows}
           columns={columns}
           rowSelection={false}
           disableRowSelectionOnClick
@@ -372,8 +401,8 @@ export default function ProfileManagement() {
                 <label className={styles.switch}>
                   <input
                     type="checkbox"
-                    checked={profileStatus}
-                    onChange={(e) => setProfileStatus(e.target.checked)}
+                    checked={profileStatus == 1}
+                    onChange={(e) => setProfileStatus(e.target.checked ? 1 : 2)}
                   />
                   <span className={styles.slider} />
                 </label>
