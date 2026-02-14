@@ -173,6 +173,13 @@ function getCommentsDb() {
         user: { id: 1, name: "Camila Alves", avatarUrl: Avatar },
         text: "Perfeito. Se acontecer algo, manda print e os passos pra equipe técnica analisar.",
       },
+      {
+        id: 203,
+        parentCommentId: null,
+        mentionedUsername: null,
+        user: { id: 3, name: "Ana Antunes", avatarUrl: Avatar2 },
+        text: "Certo, obrigada!",
+      },
     ],
     3: [
       {

@@ -2,20 +2,29 @@ import {
   faArrowRight,
   faHeart,
   faCommentDots,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CircularProgress } from "@mui/material";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { getPostCommentReplies } from "~/services/Feed/feedService.api";
 import { useToast } from "~/providers/Toast/useToast";
 import styles from "./feedComment.module.css";
-import Tooltip from "~/components/Tooltip/Tooltip"
+import Tooltip from "~/components/Tooltip/Tooltip";
 const COMMENT_TRUNCATE_LIMIT = 100;
 
-export default function FeedComment({ comment, postId }) {
+export default function FeedComment({
+  comment,
+  postId,
+  replyingParentId,
+  setReplyingParentId,
+}) {
   const toast = useToast();
 
   const isReply = comment.parentCommentId !== null;
+  const parentId = isReply ? comment.parentCommentId : comment.id;
+  const [replyText, setReplyText] = useState("");
+  const replyTextareaRef = useRef(null);
 
   const [isRepliesOpen, setIsRepliesOpen] = useState(false);
   const [isLoadingReplies, setIsLoadingReplies] = useState(false);
@@ -52,6 +61,41 @@ export default function FeedComment({ comment, postId }) {
   function handleToggleExpand() {
     setExpanded((v) => !v);
   }
+
+  function handleToggleReply() {
+    setReplyingParentId((current) => (current === parentId ? null : parentId));
+    setTimeout(() => {
+      replyTextareaRef.current?.focus();
+    }, 0);
+  }
+
+  function handleSubmitReply() {
+    const value = replyText.trim();
+    if (!value) return;
+    toast.success("Sucesso", "Comentário enviado com sucesso!");
+    setReplyText("");
+    setReplyingParentId(null);
+  }
+
+  useEffect(() => {
+    if (isReply) return;
+    if (replyingParentId !== comment.id) return;
+
+    if (replies === null) {
+      (async () => {
+        try {
+          setIsLoadingReplies(true);
+          const data = await getPostCommentReplies(postId, comment.id);
+          setReplies(data);
+        } catch (err) {
+          toast.error("Erro", err);
+          setReplies([]);
+        } finally {
+          setIsLoadingReplies(false);
+        }
+      })();
+    }
+  }, [isReply, replyingParentId, comment.id, replies, postId, toast]);
 
   return (
     <li
@@ -104,12 +148,15 @@ export default function FeedComment({ comment, postId }) {
               </button>
             </Tooltip>
             <Tooltip content="Responder" placement="top">
-              <button className={styles["comment-action"]}>
+              <button
+                className={styles["comment-action"]}
+                type="button"
+                onClick={handleToggleReply}
+              >
                 <FontAwesomeIcon icon={faCommentDots} />
               </button>
             </Tooltip>
           </div>
-
           {comment?.repliesCount > 0 ? (
             <button
               type="button"
@@ -133,7 +180,13 @@ export default function FeedComment({ comment, postId }) {
           ) : replies?.length ? (
             <ul className={styles["replies-list"]}>
               {replies.map((r) => (
-                <FeedComment key={r.id} comment={r} postId={postId} />
+                <FeedComment
+                  key={r.id}
+                  comment={r}
+                  postId={postId}
+                  replyingParentId={replyingParentId}
+                  setReplyingParentId={setReplyingParentId}
+                />
               ))}
             </ul>
           ) : (
@@ -141,6 +194,36 @@ export default function FeedComment({ comment, postId }) {
               Nenhum comentário foi encontrado. Seja o primeiro a comentar!
             </div>
           )}
+        </div>
+      ) : null}
+
+      {!isReply && replyingParentId === comment.id ? (
+        <div className={styles["replybox"]}>
+          <div className={styles["replybox-avatar"]}>
+            <span className={styles["replybox-avatar-fallback"]}>
+              <FontAwesomeIcon icon={faUser} />
+            </span>
+          </div>
+
+          <div className={styles["replybox-input"]}>
+            <textarea
+              ref={replyTextareaRef}
+              value={replyText}
+              onChange={(e) => setReplyText(e.target.value)}
+              placeholder="Escreva uma resposta..."
+              rows={3}
+            />
+            <div className={styles["replybox-footer"]}>
+              <button
+                type="button"
+                className={styles["replybox-submit"]}
+                onClick={handleSubmitReply}
+                disabled={!replyText.trim()}
+              >
+                Responder
+              </button>
+            </div>
+          </div>
         </div>
       ) : null}
     </li>

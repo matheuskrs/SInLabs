@@ -5,12 +5,13 @@ import {
   faShare,
   faQuestionCircle,
   faCopy,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { useMediaQuery, CircularProgress } from "@mui/material";
 import Tooltip from "~/components/Tooltip/Tooltip";
 import styles from "./feedPost.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   getPostComments,
   getShareUrlForPost,
@@ -27,14 +28,26 @@ export default function FeedPost({ post }) {
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
   const [isLoadingComments, setIsLoadingComments] = useState(false);
   const [comments, setComments] = useState(null);
-
+  const [replyingParentId, setReplyingParentId] = useState(null);
   const [openShareModal, setOpenShareModal] = useState(false);
   const [shareUrl, setShareUrl] = useState("");
+
+  const [commentText, setCommentText] = useState("");
+  const commentTextareaRef = useRef(null);
 
   async function handleToggleComments() {
     const willOpen = !isCommentsOpen;
     setIsCommentsOpen(willOpen);
-    if (!willOpen) return;
+    if (!willOpen) {
+      setReplyingParentId(null);
+      setCommentText("");
+      return;
+    }
+
+    setTimeout(() => {
+      commentTextareaRef.current?.focus();
+    }, 0);
+
     if (comments !== null) return;
 
     try {
@@ -47,6 +60,15 @@ export default function FeedPost({ post }) {
     } finally {
       setIsLoadingComments(false);
     }
+  }
+
+  function handleSubmitComment() {
+    const value = commentText.trim();
+    if (!value) return;
+
+    setCommentText("");
+
+    toast.success("Sucesso", "Comentário enviado!");
   }
 
   function openShare() {
@@ -72,6 +94,7 @@ export default function FeedPost({ post }) {
       );
     }
   }
+
   return (
     <div
       className={styles["post-wrapper"]}
@@ -170,6 +193,37 @@ export default function FeedPost({ post }) {
         </div>
 
         {isCommentsOpen && (
+          <div className={`${styles["replybox"]} ${styles["post-comment-textbox"]}`}>
+            <div className={styles["replybox-avatar"]}>
+              <span className={styles["replybox-avatar-fallback"]}>
+                <FontAwesomeIcon icon={faUser} />
+              </span>
+            </div>
+
+            <div className={styles["replybox-input"]}>
+              <textarea
+                ref={commentTextareaRef}
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                placeholder="Escreva um comentário..."
+                rows={3}
+              />
+
+              <div className={styles["replybox-footer"]}>
+                <button
+                  type="button"
+                  className={styles["replybox-submit"]}
+                  onClick={handleSubmitComment}
+                  disabled={!commentText.trim()}
+                >
+                  Comentar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {isCommentsOpen && (
           <div className={styles["comments-area"]}>
             {isLoadingComments ? (
               <div className={styles["comments-loading"]}>
@@ -178,7 +232,13 @@ export default function FeedPost({ post }) {
             ) : comments?.length ? (
               <ul className={styles["comments-list"]}>
                 {comments.map((c) => (
-                  <FeedComment key={c.id} comment={c} postId={post.id} />
+                  <FeedComment
+                    key={c.id}
+                    comment={c}
+                    postId={post.id}
+                    replyingParentId={replyingParentId}
+                    setReplyingParentId={setReplyingParentId}
+                  />
                 ))}
               </ul>
             ) : (
