@@ -46,10 +46,6 @@ export default function FeedPost({ post }) {
       return;
     }
 
-    setTimeout(() => {
-      commentTextareaRef.current?.focus();
-    }, 0);
-
     if (comments !== null) return;
 
     try {

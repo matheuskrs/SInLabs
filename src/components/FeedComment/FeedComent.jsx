@@ -66,9 +66,6 @@ export default function FeedComment({
 
   function handleToggleReply() {
     setReplyingParentId((current) => (current === parentId ? null : parentId));
-    setTimeout(() => {
-      replyTextareaRef.current?.focus();
-    }, 0);
   }
 
   function handleSubmitReply() {
