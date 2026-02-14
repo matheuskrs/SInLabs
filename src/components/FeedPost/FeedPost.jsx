@@ -6,6 +6,7 @@ import {
   faQuestionCircle,
   faCopy,
   faUser,
+  faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 import { useMediaQuery, CircularProgress } from "@mui/material";
 import Tooltip from "~/components/Tooltip/Tooltip";
@@ -23,6 +24,7 @@ import { formatRelativeDate } from "~/utils/date";
 
 export default function FeedPost({ post }) {
   const isVerySmall = useMediaQuery("(max-width:400px)");
+  const isMobile = useMediaQuery("(max-width:700px)");
   const toast = useToast();
 
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
@@ -216,7 +218,7 @@ export default function FeedPost({ post }) {
                   onClick={handleSubmitComment}
                   disabled={!commentText.trim()}
                 >
-                  Comentar
+                  {isMobile ? <FontAwesomeIcon icon={faPaperPlane} /> : "Comentar"}
                 </button>
               </div>
             </div>

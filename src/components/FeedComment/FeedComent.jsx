@@ -3,9 +3,10 @@ import {
   faHeart,
   faCommentDots,
   faUser,
+  faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, useMediaQuery } from "@mui/material";
 import { useState, useMemo, useRef, useEffect } from "react";
 import { getPostCommentReplies } from "~/services/Feed/feedService.api";
 import { useToast } from "~/providers/Toast/useToast";
@@ -19,6 +20,7 @@ export default function FeedComment({
   replyingParentId,
   setReplyingParentId,
 }) {
+  const isMobile = useMediaQuery("(max-width:700px)");
   const toast = useToast();
 
   const isReply = comment.parentCommentId !== null;
@@ -220,7 +222,7 @@ export default function FeedComment({
                 onClick={handleSubmitReply}
                 disabled={!replyText.trim()}
               >
-                Responder
+                {isMobile ? <FontAwesomeIcon icon={faPaperPlane} /> : "Responder"}
               </button>
             </div>
           </div>
