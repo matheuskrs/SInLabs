@@ -101,6 +101,7 @@
 .comment-actions {
   display: flex;
   gap: 8px;
+  margin-left: -8px;
 }
 
 .comment-action {
@@ -162,7 +163,7 @@
 .replies-area {
   margin-left: 30px;
   margin-top: 6px;
-  opacity:0.9;
+  opacity: 0.9;
 }
 
 .replies-loading {

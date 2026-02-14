@@ -113,7 +113,7 @@ function getPostsDb() {
       text: "Treinamento rápido amanhã sobre boas práticas no cadastro de usuários e organização dos laboratórios.",
       postImg: postImg1,
       likesCount: 25,
-      commentsCount: 2,
+      commentsCount: 3,
       isLikedByMe: false,
     },
     {
@@ -197,6 +197,13 @@ function getCommentsDb() {
         mentionedUsername: "Ana Antunes",
         user: { id: 2, name: "Thais Morais", avatarUrl: Avatar1 },
         text: "Sim! Vou gravar e depois posto no feed com o link e um resumo das principais dicas.\nAh! Se não for pedir demais, não esquece de avisar pro seu time para que na sequência iniciem o treinamento do processo de associação de permissões dos usuários.",
+      },
+      {
+        id: 403,
+        parentCommentId: 401,
+        mentionedUsername: "Thais Morais",
+        user: { id: 3, name: "Ana Antunes", avatarUrl: Avatar2 },
+        text: "Obrigada! Pode deixar, vou avisá-los.",
       },
     ],
     5: [
