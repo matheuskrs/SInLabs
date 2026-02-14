@@ -27,6 +27,8 @@ export default function Users() {
   const [profileOptions, setProfileOptions] = useState([]);
   const [headerLaboratoryOptions, setLaboratories] = useState([]);
   const [userStatusOptions, setUserStatusOptions] = useState([]);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState(search);
   const [profileFilter, setProfileFilter] = useState(0);
   const [laboratoryFilter, setLaboratoryFilter] = useState(0);
   const [statusFilter, setStatusFilter] = useState(0);
@@ -63,6 +65,14 @@ export default function Users() {
     }
     loadLaboratories();
   }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, [search]);
 
   const fileRef = useRef(null);
 
@@ -267,6 +277,55 @@ export default function Users() {
     },
     [confirm, toast, showLoading, hideLoading],
   );
+  
+  const filteredRows = useMemo(() => {
+    const searchLower = String(debouncedSearch || "")
+      .toLowerCase()
+      .trim();
+
+    const selectedProfileName =
+      profileFilter === 0
+        ? ""
+        : (profileOptions.find((p) => p.id === profileFilter)?.name || "")
+            .toLowerCase()
+            .trim();
+
+    return (rows || []).filter((row) => {
+      if (searchLower) {
+        const name = String(row?.name || "").toLowerCase();
+        if (!name.includes(searchLower)) return false;
+      }
+
+      if (profileFilter !== 0) {
+        const rowProfile = String(row?.profile || "")
+          .toLowerCase()
+          .trim();
+        if (!selectedProfileName || rowProfile !== selectedProfileName)
+          return false;
+      }
+
+      if (statusFilter !== 0) {
+        if (Number(row?.status?.id) !== statusFilter) return false;
+      }
+
+      if (laboratoryFilter !== 0) {
+        const labs = Array.isArray(row?.laboratories) ? row.laboratories : [];
+        const hasLab = labs.some(
+          (l) => Number(l?.id) === Number(laboratoryFilter),
+        );
+        if (!hasLab) return false;
+      }
+
+      return true;
+    });
+  }, [
+    rows,
+    debouncedSearch,
+    profileFilter,
+    laboratoryFilter,
+    statusFilter,
+    profileOptions,
+  ]);
 
   const desktopColumns = useMemo(
     () => [
@@ -452,6 +511,8 @@ export default function Users() {
             className={styles["user-search"]}
             placeholder="Buscar usuário..."
             name="user-search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
           {!isMobile && (
             <Tooltip content="Todos os perfis">
@@ -517,7 +578,7 @@ export default function Users() {
 
         <DataGrid
           localeText={ptBR.components.MuiDataGrid.defaultProps.localeText}
-          rows={rows}
+          rows={filteredRows}
           columns={columns}
           rowSelection={false}
           disableRowSelectionOnClick
