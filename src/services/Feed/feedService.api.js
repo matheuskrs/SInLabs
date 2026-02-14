@@ -196,7 +196,7 @@ function getCommentsDb() {
         parentCommentId: 401,
         mentionedUsername: "Ana Antunes",
         user: { id: 2, name: "Thais Morais", avatarUrl: Avatar1 },
-        text: "Sim! Vou gravar e depois posto no feed com o link e um resumo das principais dicas.\nAh! Se não for pedir demais, não esquece de avisar pro seu time para que eles iniciem o treinamento dos processos de cadastro de usuário.",
+        text: "Sim! Vou gravar e depois posto no feed com o link e um resumo das principais dicas.\nAh! Se não for pedir demais, não esquece de avisar pro seu time para que na sequência iniciem o treinamento do processo de associação de permissões dos usuários.",
       },
     ],
     5: [
