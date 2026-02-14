@@ -103,7 +103,7 @@ export default function FeedComment({ comment, postId }) {
                 <span>{comment?.likesCount ?? 0}</span>
               </button>
             </Tooltip>
-            <Tooltip content="Comentar" placement="top">
+            <Tooltip content="Responder" placement="top">
               <button className={styles["comment-action"]}>
                 <FontAwesomeIcon icon={faCommentDots} />
               </button>
