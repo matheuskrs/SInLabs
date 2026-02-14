@@ -1,0 +1,67 @@
+.content-wrapper {
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  max-width: 2000px;
+  width: 90%;
+}
+
+:global(.grid-wrapper) {
+  width: 100% !important;
+}
+.empty-state {
+  border: 2px dashed #ddd;
+  border-radius: 10px;
+  padding: 16px;
+  color: #777;
+}
+
+.tab-content {
+  margin-top: 8px;
+}
+
+.tab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 10px 0 12px;
+  gap: 12px;
+}
+
+.btn-export {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 2px solid var(--main-color);
+  background: transparent;
+  color: var(--main-color);
+  cursor: pointer;
+  transition: 160ms ease-in-out;
+  white-space: nowrap;
+}
+
+.btn-export:hover {
+  background: var(--main-color);
+  color: white;
+}
+
+/* loginHistoryTab */
+.status-badge {
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 7px;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  user-select: none;
+  width: 100%;
+}
