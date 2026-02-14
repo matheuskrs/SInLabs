@@ -216,7 +216,7 @@
   width: 100%;
   resize: vertical;
   min-height: 40px;
-  height:40px;
+  height: 40px;
   border-radius: 12px 12px 0 0;
   border: 1px solid #e6e6e6;
   padding: 10px 12px;
@@ -346,4 +346,13 @@
   cursor: pointer;
   white-space: nowrap;
   z-index: 2;
+}
+
+@media (max-width: 700px) {
+  .replybox {
+    padding-left: 0px;
+  }
+  .replybox textarea::placeholder {
+    color: transparent;
+  }
 }

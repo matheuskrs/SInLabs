@@ -294,4 +294,12 @@
   .reply {
     padding-left: 0px;
   }
+
+  .replybox {
+    padding-left: 0px;
+  }
+
+  .replybox textarea::placeholder {
+    color: transparent;
+  }
 }
