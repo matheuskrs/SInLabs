@@ -83,7 +83,7 @@ function getPostsDb() {
       text: "Novo sistema disponível para testes no ambiente interno. Caso identifique qualquer comportamento inesperado, reporte para a equipe técnica.",
       postImg: null,
       likesCount: 42,
-      commentsCount: 2,
+      commentsCount: 3,
       isLikedByMe: true,
     },
     {
