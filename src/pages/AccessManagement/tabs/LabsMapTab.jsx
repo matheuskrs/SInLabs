@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { getLabsMap } from "~/services/AccessManagement/accessManagement.api";
+import { useMediaQuery } from "@mui/material";
 
 function downloadCsv(filename, csvText) {
   const blob = new Blob(["\ufeff" + csvText], {
@@ -60,7 +61,8 @@ function LabMapCard({ lab }) {
       <div className={styles["labmap-city"]}>{lab?.city}</div>
 
       <div className={styles["labmap-users"]}>
-        <span className={styles["active-users"]}>{lab?.activeUsers}</span> usuários ativos
+        <span className={styles["active-users"]}>{lab?.activeUsers}</span>{" "}
+        usuários ativos
       </div>
     </div>
   );
@@ -68,6 +70,7 @@ function LabMapCard({ lab }) {
 
 export default function LabsMapTab() {
   const [labs, setLabs] = useState([]);
+  const isMobile = useMediaQuery("(max-width:700px)");
 
   useEffect(() => {
     async function load() {
@@ -95,7 +98,7 @@ export default function LabsMapTab() {
           onClick={exportCsv}
         >
           <FontAwesomeIcon icon={faDownload} />
-          Exportar CSV
+          {!isMobile && "Exportar CSV"}
         </button>
       </div>
 
