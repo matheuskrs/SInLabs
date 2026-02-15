@@ -1,0 +1,83 @@
+.session-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 14px;
+  max-width: 320px;
+  width: 100%;
+}
+
+.session-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.session-user {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.session-status {
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.session-device {
+  margin-top: 6px;
+  color: #555;
+  font-size: 14px;
+}
+
+.session-meta {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #444;
+  font-size: 14px;
+}
+
+.session-meta-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #999;
+  display: inline-block;
+}
+
+.session-actions {
+  margin-top: 14px;
+}
+
+.btn-end-session {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  padding: 10px 12px;
+  width: 100%;
+  border-radius: 8px;
+  border: 2px solid #fd2a2a;
+  background: #f8fafc;
+  color: #fd2a2a;
+  cursor: pointer;
+  transition: 160ms ease-in-out;
+}
+
+.btn-end-session:hover {
+  background: #fd2a2a;
+  color: white;
+}
