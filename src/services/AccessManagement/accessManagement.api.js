@@ -56,3 +56,77 @@ export async function getLoginStatus() {
     { id: 2, name: "Falhou", color: "#fd2a2a" },
   ];
 }
+
+export async function getActiveSessions() {
+  // const response = await axios.get("api/active-sessions");
+  // return response.data;
+
+  return [
+    {
+      id: 1,
+      user: "João Silva",
+      device: "Windows PC",
+      startTime: "10:30",
+      duration: "1h30min",
+      ip: "192.168.1.10",
+      status: { id: 1, name: "Ativa", color: "#24b92b" },
+    },
+    {
+      id: 2,
+      user: "Maria Santos",
+      device: "MacBook",
+      startTime: "11:00",
+      duration: "1h00min",
+      ip: "192.168.1.15",
+      status: { id: 1, name: "Ativa", color: "#24b92b" },
+    },
+  ];
+}
+
+
+export async function getDownloadsWeek() {
+  // const response = await axios.get("api/downloads/week");
+  // return response.data;
+
+  return [
+    { day: "Segunda", value: 10 },
+    { day: "Terça", value: 20 },
+    { day: "Quarta", value: 15 },
+    { day: "Quinta", value: 28 },
+    { day: "Sexta", value: 25 },
+    { day: "Sábado", value: 7 },
+    { day: "Domingo", value: 5 },
+  ];
+}
+
+export async function getDownloadsHistory() {
+  // const response = await axios.get("api/downloads/history");
+  // return response.data;
+
+  return [
+    {
+      id: 1,
+      user: "João Silva",
+      system: "KinesiOS 360",
+      dateTime: "2025-10-22 10:35",
+      size: "125 MB",
+      status: { id: 1, name: "Completo", color: "#24b92b" },
+    },
+    {
+      id: 2,
+      user: "Maria Santos",
+      system: "KinesiOS One",
+      dateTime: "2025-10-21 15:20",
+      size: "85 MB",
+      status: { id: 1, name: "Completo", color: "#24b92b" },
+    },
+    {
+      id: 3,
+      user: "Pedro Costa",
+      system: "KinesiOS Azure",
+      dateTime: "2025-10-20 09:10",
+      size: "95 MB",
+      status: { id: 2, name: "Falhou", color: "#fd2a2a" },
+    },
+  ];
+}
