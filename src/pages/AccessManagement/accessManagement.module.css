@@ -226,6 +226,7 @@
   padding: 14px;
   width: 320px;
   max-width: 100%;
+  flex:1;
 }
 
 .labmap-card-header {
