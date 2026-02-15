@@ -6,8 +6,9 @@ import "~/styles/commonGrid.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { getLoginHistory } from "~/services/AccessManagement/accessManagement.api";
-
+import { useMediaQuery } from "@mui/material";
 export default function LoginHistoryTab() {
+  const isMobile = useMediaQuery("(max-width:700px)");
   const apiRef = useGridApiRef();
   const [rows, setRows] = useState([]);
 
@@ -68,7 +69,7 @@ export default function LoginHistoryTab() {
           onClick={exportCsv}
         >
           <FontAwesomeIcon icon={faDownload} />
-          Exportar CSV
+          {!isMobile && "Exportar CSV"}
         </button>
       </div>
 
