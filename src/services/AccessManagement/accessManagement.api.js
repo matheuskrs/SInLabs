@@ -83,7 +83,6 @@ export async function getActiveSessions() {
   ];
 }
 
-
 export async function getDownloadsWeek() {
   // const response = await axios.get("api/downloads/week");
   // return response.data;
@@ -127,6 +126,56 @@ export async function getDownloadsHistory() {
       dateTime: "2025-10-20 09:10",
       size: "95 MB",
       status: { id: 2, name: "Falhou", color: "#fd2a2a" },
+    },
+  ];
+}
+
+export async function getLabsMap() {
+  // const response = await axios.get("api/labs-map");
+  // return response.data;
+
+  return [
+    {
+      id: 1,
+      name: "Laboratório Central",
+      city: "São Paulo",
+      status: { id: 1, name: "Ativo", color: "#24b92b" },
+      activeUsers: 12,
+    },
+    {
+      id: 2,
+      name: "Laboratório Norte",
+      city: "Rio de Janeiro",
+      status: { id: 2, name: "Inativo", color: "#fd2a2a" },
+      activeUsers: 0,
+    },
+    {
+      id: 3,
+      name: "Laboratório Minas",
+      city: "Belo Horizonte",
+      status: { id: 1, name: "Ativo", color: "#24b92b" },
+      activeUsers: 5,
+    },
+    {
+      id: 4,
+      name: "Laboratório Sul",
+      city: "Porto Alegre",
+      status: { id: 1, name: "Ativo", color: "#24b92b" },
+      activeUsers: 3,
+    },
+    {
+      id: 5,
+      name: "Laboratório Nordeste",
+      city: "Salvador",
+      status: { id: 2, name: "Inativo", color: "#fd2a2a" },
+      activeUsers: 0,
+    },
+    {
+      id: 6,
+      name: "Laboratório Centro-Oeste",
+      city: "Brasília",
+      status: { id: 1, name: "Ativo", color: "#24b92b" },
+      activeUsers: 7,
     },
   ];
 }
