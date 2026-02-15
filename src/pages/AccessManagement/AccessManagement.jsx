@@ -4,10 +4,10 @@ import Header from "~/components/Header/Header";
 import accessManagementImg from "~/assets/AccessManagement/accessManagementImg.png";
 import Tabs from "~/components/Tabs/Tabs";
 
-import LoginHistoryTab from "./tabs/LoginHistoryTab";
-import ActiveSessionsTab from "./tabs/ActiveSessionsTab";
-import DownloadsTab from "./tabs/DownloadsTab";
-import LabsMapTab from "./tabs/LabsMapTab";
+import LoginHistoryTab from "./tabs/LoginHistory/LoginHistoryTab";
+import ActiveSessionsTab from "./tabs/ActiveSessions/ActiveSessionsTab";
+import DownloadsTab from "./tabs/Downloads/DownloadsTab";
+import LabsMapTab from "./tabs/LabsMap/LabsMapTab";
 
 export default function AccessManagement() {
   const [activeTab, setActiveTab] = useState("login-history");

@@ -1,7 +1,7 @@
-import styles from "../accessManagement.module.css";
+import styles from "./downloads.module.css";
 import { useEffect, useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload, faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { DataGrid, useGridApiRef } from "@mui/x-data-grid";
 import { ptBR } from "@mui/x-data-grid/locales";
 import "~/styles/commonGrid.css";
@@ -20,6 +20,7 @@ import {
   getDownloadsHistory,
 } from "~/services/AccessManagement/accessManagement.api";
 import { useMediaQuery } from "@mui/material";
+import TabHeader from "~/components/Tabs/TabHeader/TabHeader";
 function downloadCsv(filename, csvText) {
   const blob = new Blob(["\ufeff" + csvText], {
     type: "text/csv;charset=utf-8;",
@@ -122,19 +123,7 @@ export default function DownloadsTab() {
 
   return (
     <>
-      <div className={styles["tab-header"]}>
-        <span>Downloads</span>
-
-        <button
-          type="button"
-          className={styles["btn-export"]}
-          onClick={exportCsv}
-        >
-          <FontAwesomeIcon icon={faDownload} />
-          {!isMobile && "Exportar CSV"}
-        </button>
-      </div>
-
+      <TabHeader title="Downloads" exportCsv={exportCsv} />
       <div className={styles["tab-content"]}>
         <div className={styles["downloads-chart-card"]}>
           <div className={styles["downloads-chart-title"]}>

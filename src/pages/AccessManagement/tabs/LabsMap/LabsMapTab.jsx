@@ -1,9 +1,9 @@
-import styles from "../accessManagement.module.css";
+import styles from "./labsMap.module.css";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { getLabsMap } from "~/services/AccessManagement/accessManagement.api";
-import { useMediaQuery } from "@mui/material";
+import TabHeader from "~/components/Tabs/TabHeader/TabHeader";
 
 function downloadCsv(filename, csvText) {
   const blob = new Blob(["\ufeff" + csvText], {
@@ -70,7 +70,6 @@ function LabMapCard({ lab }) {
 
 export default function LabsMapTab() {
   const [labs, setLabs] = useState([]);
-  const isMobile = useMediaQuery("(max-width:700px)");
 
   useEffect(() => {
     async function load() {
@@ -89,19 +88,7 @@ export default function LabsMapTab() {
 
   return (
     <>
-      <div className={styles["tab-header"]}>
-        <span>Mapa de laboratórios</span>
-
-        <button
-          type="button"
-          className={styles["btn-export"]}
-          onClick={exportCsv}
-        >
-          <FontAwesomeIcon icon={faDownload} />
-          {!isMobile && "Exportar CSV"}
-        </button>
-      </div>
-
+      <TabHeader title="Mapa de laboratórios" exportCsv={exportCsv} />
       <div className={styles["tab-content"]}>
         <div className={styles["map-preview"]}>
           <FontAwesomeIcon

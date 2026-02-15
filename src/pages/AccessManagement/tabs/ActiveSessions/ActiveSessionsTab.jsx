@@ -1,7 +1,5 @@
-import styles from "../accessManagement.module.css";
+import styles from "./activeSessions.module.css";
 import { useEffect, useMemo, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { Select, MenuItem } from "@mui/material";
 
 import { getActiveSessions } from "~/services/AccessManagement/accessManagement.api";
@@ -10,6 +8,7 @@ import { useToast } from "~/providers/Toast/useToast";
 import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
 import ActiveSessionCard from "~/components/ActiveSessionsCard/ActiveSessionCard";
 import { useMediaQuery } from "@mui/material";
+import TabHeader from "~/components/Tabs/TabHeader/TabHeader";
 
 function downloadCsv(filename, csvText) {
   const blob = new Blob(["\ufeff" + csvText], {
@@ -104,18 +103,7 @@ export default function ActiveSessionsTab() {
   const isMobile = useMediaQuery("(max-width:700px)");
   return (
     <>
-      <div className={styles["tab-header"]}>
-        <span>Sessões ativas</span>
-
-        <button
-          type="button"
-          className={styles["btn-export"]}
-          onClick={exportCsv}
-        >
-          <FontAwesomeIcon icon={faDownload} />
-          {!isMobile && "Exportar CSV"}
-        </button>
-      </div>
+      <TabHeader title="Sessões ativas" exportCsv={exportCsv} />
 
       <div className={styles["tab-content"]}>
         {totalItems === 0 ? (

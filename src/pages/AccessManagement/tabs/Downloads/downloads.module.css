@@ -1,0 +1,56 @@
+.downloads-chart-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.downloads-chart-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.downloads-chart-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.downloads-chart-inner {
+  min-width: 520px;
+}
+
+.downloads-chart-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.downloads-chart-scroll::-webkit-scrollbar-thumb {
+  background: rgba(120, 120, 120, 0.35);
+  border-radius: 999px;
+}
+
+.downloads-peak-text {
+  margin-top: 8px;
+  color: #555;
+  font-size: 13px;
+}
+
+.downloads-history-wrapper {
+  margin-top: 6px;
+}
+
+.section-title {
+  font-weight: 700;
+  font-size: 16px;
+  margin: 6px 0 12px;
+}
+
+.size-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}

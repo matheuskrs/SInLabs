@@ -1,14 +1,11 @@
-import styles from "../accessManagement.module.css";
+import styles from "./loginHistory.module.css";
 import { useEffect, useMemo, useState } from "react";
 import { DataGrid, useGridApiRef } from "@mui/x-data-grid";
 import { ptBR } from "@mui/x-data-grid/locales";
 import "~/styles/commonGrid.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { getLoginHistory } from "~/services/AccessManagement/accessManagement.api";
-import { useMediaQuery } from "@mui/material";
+import TabHeader from "~/components/Tabs/TabHeader/TabHeader";
 export default function LoginHistoryTab() {
-  const isMobile = useMediaQuery("(max-width:700px)");
   const apiRef = useGridApiRef();
   const [rows, setRows] = useState([]);
 
@@ -60,19 +57,7 @@ export default function LoginHistoryTab() {
 
   return (
     <>
-      <div className={styles["tab-header"]}>
-        <span>Histórico de login</span>
-
-        <button
-          type="button"
-          className={styles["btn-export"]}
-          onClick={exportCsv}
-        >
-          <FontAwesomeIcon icon={faDownload} />
-          {!isMobile && "Exportar CSV"}
-        </button>
-      </div>
-
+      <TabHeader title="Histórico de login" exportCsv={exportCsv} />
       <div className={styles["tab-content"]}>
         <div className="grid-wrapper">
           <DataGrid

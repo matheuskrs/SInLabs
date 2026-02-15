@@ -1,0 +1,29 @@
+.tab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 10px 0 12px;
+  gap: 12px;
+}
+
+.btn-export {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 2px solid var(--main-color);
+  background: transparent;
+  color: var(--main-color);
+  cursor: pointer;
+  transition: 160ms ease-in-out;
+  white-space: nowrap;
+}
+
+.btn-export:hover {
+  background: var(--main-color);
+  color: white;
+}
