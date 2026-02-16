@@ -255,7 +255,7 @@ export default function FeedPost({ post }) {
       >
         <div className={styles["share-modal"]}>
           <div className={styles["share-modal-title"]}>
-            Compartilhe o seu post!
+            Compartilhe essa postagem!
           </div>
 
           <div className={styles["share-modal-wrapper"]}>
