@@ -2,7 +2,7 @@ import Header from "~/components/Header/Header";
 import feedImg from "~/assets/Feed/feedImg.png";
 import styles from "./feed.module.css";
 import FeedPost from "~/components/FeedPost/FeedPost";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { use, useEffect, useMemo, useRef, useState } from "react";
 import {
   getFeed,
   getFeedCategories,
@@ -15,59 +15,51 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Select, MenuItem, CircularProgress } from "@mui/material";
 import { useMediaQuery } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
 import { useToast } from "~/providers/Toast/useToast";
+
 export default function Feed() {
   const isTablet = useMediaQuery("(max-width:1024px)");
   const { search } = useLocation();
   const toast = useToast();
-  const [posts, setPosts] = useState([]);
-  const [labs, setLabs] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [sharedPost, setSharedPost] = useState(null);
 
   const [selectedLabId, setSelectedLabId] = useState(0);
   const [selectedCategoryId, setSelectedCategoryId] = useState(0);
-  const { showLoading, hideLoading } = useGlobalLoading();
+
   const notifiedRef = useRef(false);
   const scrolledToSharedRef = useRef(false);
 
+  const shareGuid = extractShareGuidFromSearch(search);
+
+  const dataPromise = useMemo(() => {
+    return Promise.all([
+      getFeed(),
+      getLaboratories(),
+      getFeedCategories(),
+      shareGuid ? getSharedPostByGuid(shareGuid) : Promise.resolve(null),
+    ]);
+  }, [shareGuid]);
+
+  const [feedData, labsData, categoriesData, sharedData] = use(dataPromise);
+
+  const posts = useMemo(() => feedData ?? [], [feedData]);
+  const labs = useMemo(() => labsData ?? [], [labsData]);
+  const categories = useMemo(() => categoriesData ?? [], [categoriesData]);
+  const sharedPost = sharedData?.post ?? null;
+
   useEffect(() => {
-    async function loadData() {
-      const shareGuid = extractShareGuidFromSearch(search);
+    if (!shareGuid) return;
+    if (!sharedData) return;
+    if (notifiedRef.current) return;
 
-      showLoading("Carregando notícias");
-      try {
-        const [feedData, labsData, categoriesData, sharedData] =
-          await Promise.all([
-            getFeed(),
-            getLaboratories(),
-            getFeedCategories(),
-            shareGuid ? getSharedPostByGuid(shareGuid) : Promise.resolve(null),
-          ]);
-        setPosts(feedData ?? []);
-        setLabs(labsData ?? []);
-        setCategories(categoriesData ?? []);
-        setSharedPost(sharedData?.post ?? null);
-
-        if (shareGuid && sharedData && !notifiedRef.current) {
-          notifiedRef.current = true;
-          toast.success(
-            "Sucesso",
-            `Você acessou um post compartilhado!
+    notifiedRef.current = true;
+    toast.success(
+      "Sucesso",
+      `Você acessou um post compartilhado!
             Confira o primeiro post em destaque.`,
-          );
-        }
-      } finally {
-        hideLoading();
-      }
-    }
-    loadData();
-  }, [search, showLoading, hideLoading, toast]);
+    );
+  }, [shareGuid, sharedData, toast]);
 
   useEffect(() => {
-    const shareGuid = extractShareGuidFromSearch(search);
-
     if (!shareGuid) return;
     if (!sharedPost?.isSharedPost) return;
     if (scrolledToSharedRef.current) return;
@@ -87,7 +79,8 @@ export default function Feed() {
         el.classList.remove("sharedFlash");
       }, 2000);
     });
-  }, [sharedPost, search]);
+  }, [sharedPost, shareGuid]);
+
   const mergedPosts = useMemo(() => {
     if (!sharedPost) return posts ?? [];
     const rest = (posts ?? []).filter((p) => p.id !== sharedPost.id);
