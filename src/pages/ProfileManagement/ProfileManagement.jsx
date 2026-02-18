@@ -8,7 +8,7 @@ import { useConfirm } from "~/components/ConfirmationDialog/UseConfirm";
 import styles from "./profileManagement.module.css";
 import { useMediaQuery } from "@mui/material";
 import { Select, MenuItem } from "@mui/material";
-import { useEffect, useMemo, useCallback, useState } from "react";
+import { use, useMemo, useCallback, useState } from "react";
 import Tooltip from "~/components/Tooltip/Tooltip";
 import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
 import { useToast } from "~/providers/Toast/useToast";
@@ -19,8 +19,11 @@ import {
 } from "~/services/ProfileManagement/profileAccessService.api";
 import Header from "~/components/Header/Header";
 import { getProfileStatus } from "~/services/ProfileManagement/profileAccessService.api";
+const permissionsPromise = getAccessPermissions();
+const profilesPromise = getAccessProfiles();
+const profileStatusPromise = getProfileStatus();
+
 export default function ProfileManagement() {
-  const [rows, setRows] = useState([]);
   const [status, setStatus] = useState(0);
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState("");
@@ -28,34 +31,16 @@ export default function ProfileManagement() {
   const [profileName, setProfileName] = useState("");
   const [profileDescription, setProfileDescription] = useState("");
   const [profileStatus, setProfileStatus] = useState(1);
-  const [permissions, setPermissions] = useState([]);
   const [profilePermissions, setProfilePermissions] = useState([]);
-  const [profileFilterStatus, setProfileFilterStatus] = useState([]);
   const { showLoading, hideLoading } = useGlobalLoading();
   const { confirm, ConfirmDialog } = useConfirm();
   const toast = useToast();
   const MAX_NAME_LENGTH = 60;
   const MAX_DESCRIPTION_LENGTH = 200;
+  const permissions = use(permissionsPromise);
+  const rows = use(profilesPromise);
+  const profileFilterStatus = use(profileStatusPromise);
 
-  useEffect(() => {
-    async function loadPermissions() {
-      const data = await getAccessPermissions();
-      setPermissions(data);
-    }
-    loadPermissions();
-
-    async function loadProfiles() {
-      const data = await getAccessProfiles();
-      setRows(data);
-    }
-    loadProfiles();
-
-    async function loadProfileStatus() {
-      const data = await getProfileStatus();
-      setProfileFilterStatus(data);
-    }
-    loadProfileStatus();
-  }, []);
   const filteredRows = useMemo(() => {
     const s = String(search || "")
       .toLowerCase()
