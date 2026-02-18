@@ -17,8 +17,8 @@ import {
   getAccessPermissions,
   getAccessProfiles,
 } from "~/services/ProfileManagement/profileAccessService.api";
-import Header from "../../components/Header/Header";
-import { getProfileStatus } from "../../services/ProfileManagement/profileAccessService.api";
+import Header from "~/components/Header/Header";
+import { getProfileStatus } from "~/services/ProfileManagement/profileAccessService.api";
 export default function ProfileManagement() {
   const [rows, setRows] = useState([]);
   const [status, setStatus] = useState(0);

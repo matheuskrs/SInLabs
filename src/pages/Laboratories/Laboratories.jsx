@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { use, useRef, useState, useEffect } from "react";
 import { useMediaQuery, Select, MenuItem } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,9 +15,12 @@ import { useConfirm } from "~/components/ConfirmationDialog/UseConfirm";
 import {
   getLaboratories,
   getLaboratoryStatus,
-} from "../../services/Laboratories/laboratoriesService.api";
-import LaboratoryCard from "../../components/LaboratoryCard/LaboratoryCard";
-import Header from "../../components/Header/Header";
+} from "~/services/Laboratories/laboratoriesService.api";
+import LaboratoryCard from "~/components/LaboratoryCard/LaboratoryCard";
+import Header from "~/components/Header/Header";
+
+const laboratoriesPromise = getLaboratories();
+const laboratoryStatusPromise = getLaboratoryStatus();
 
 export default function Laboratories() {
   const isMobile = useMediaQuery("(max-width:700px)");
@@ -29,26 +32,14 @@ export default function Laboratories() {
   const { showLoading, hideLoading } = useGlobalLoading();
   const { confirm, ConfirmDialog } = useConfirm();
   const [isNew, setIsNew] = useState(true);
-  const [laboratories, setLaboratories] = useState([]);
-  const [statusOptions, setStatusOptions] = useState([]);
   const [searchFilter, setSearchFilter] = useState("");
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(1);
 
-  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  useEffect(() => {
-    async function loadLaboratories() {
-      const data = await getLaboratories();
-      setLaboratories(data);
-    }
-    loadLaboratories();
+  const laboratories = use(laboratoriesPromise);
+  const statusOptions = use(laboratoryStatusPromise);
 
-    async function loadLabStatus() {
-      const data = await getLaboratoryStatus();
-      setStatusOptions(data);
-    }
-    loadLabStatus();
-  }, []);
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   useEffect(() => {
     setPage(1);

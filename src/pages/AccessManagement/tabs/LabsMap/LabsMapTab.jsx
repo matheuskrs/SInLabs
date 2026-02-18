@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { getLabsMap } from "~/services/AccessManagement/accessManagement.api";
 import TabHeader from "~/components/Tabs/TabHeader/TabHeader";
-import LabMapCard from "../../../../components/LabMapCard/LabMapCard";
+import LabMapCard from "~/components/LabMapCard/LabMapCard";
 const labsPromise = getLabsMap();
 function downloadCsv(filename, csvText) {
   const blob = new Blob(["\ufeff" + csvText], {
