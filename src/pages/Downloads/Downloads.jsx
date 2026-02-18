@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { use, useMemo, useState } from "react";
 import { MenuItem, Select, useMediaQuery } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -13,28 +13,19 @@ import {
 } from "~/services/Systems/systemsService.api";
 import DownloadCard from "~/components/DownloadCard/DownloadCard";
 
+const systemsPromise = getSystems();
+const systemCategoriesPromise = getSystemCategories();
+
 export default function Downloads() {
   const isMobile = useMediaQuery("(max-width:700px)");
-  const [systems, setSystems] = useState([]);
+
   const [searchFilter, setSearchFilter] = useState("");
-  const [systemCategories, setSystemCategories] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState(0);
   const [orderBy, setOrderBy] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const page = 1;
-  useEffect(() => {
-    async function load() {
-      const data = await getSystems();
-      setSystems(Array.isArray(data) ? data : []);
-    }
-    load();
-
-    async function loadSystemCategories() {
-      const data = await getSystemCategories();
-      setSystemCategories(Array.isArray(data) ? data : []);
-    }
-    loadSystemCategories();
-  }, []);
+  const systems = use(systemsPromise);
+  const systemCategories = use(systemCategoriesPromise);
 
   function parseSizeToBytes(size) {
     if (!size) return Number.POSITIVE_INFINITY;
@@ -59,6 +50,7 @@ export default function Downloads() {
 
     return value * (multipliers[unit] ?? 1);
   }
+
   const filteredSystems = useMemo(() => {
     const term = (searchFilter || "").trim().toLowerCase();
 
@@ -76,7 +68,7 @@ export default function Downloads() {
   const orderedSystems = useMemo(() => {
     const data = [...filteredSystems];
 
-  switch (orderBy) {
+    switch (orderBy) {
       case 1: // nome
         return data.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
       case 2: // tamanho
