@@ -1,10 +1,18 @@
 import styles from "./labMapCard.module.css";
 
-export default function LabMapCard({ lab }) {
+export default function LabMapCard({ lab, onClick, selected }) {
   const status = lab?.status;
 
   return (
-    <div className={styles["labmap-card"]}>
+    <div
+      className={`${styles["labmap-card"]} ${
+        selected ? styles["selected"] : ""
+      }`}
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === "Enter" && onClick?.()}
+    >
       <div className={styles["labmap-card-header"]}>
         <span className={styles["labmap-lab-name"]}>{lab?.name}</span>
 

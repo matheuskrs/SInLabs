@@ -6,6 +6,17 @@
   width: 320px;
   max-width: 100%;
   flex: 1;
+  cursor: pointer;
+  transition: 200ms ease-in-out;
+}
+
+.labmap-card:hover {
+  border-color: var(--main-color);
+  transform: scale(1.02);
+}
+
+.labmap-card:active{
+  transform:scale(1.1);
 }
 
 .labmap-card-header {

@@ -133,12 +133,12 @@ export async function getDownloadsHistory() {
 export async function getLabsMap() {
   // const response = await axios.get("api/labs-map");
   // return response.data;
-
   return [
     {
       id: 1,
       name: "Laboratório Central",
       city: "São Paulo",
+      coordinates: "-23.55052,-46.633308",
       status: { id: 1, name: "Ativo", color: "#24b92b" },
       activeUsers: 12,
     },
@@ -146,6 +146,7 @@ export async function getLabsMap() {
       id: 2,
       name: "Laboratório Norte",
       city: "Rio de Janeiro",
+      coordinates: "-22.906847,-43.172897",
       status: { id: 2, name: "Inativo", color: "#fd2a2a" },
       activeUsers: 0,
     },
@@ -153,6 +154,7 @@ export async function getLabsMap() {
       id: 3,
       name: "Laboratório Minas",
       city: "Belo Horizonte",
+      coordinates: "-19.916681,-43.934493",
       status: { id: 1, name: "Ativo", color: "#24b92b" },
       activeUsers: 5,
     },
@@ -160,6 +162,7 @@ export async function getLabsMap() {
       id: 4,
       name: "Laboratório Sul",
       city: "Porto Alegre",
+      coordinates: "-30.034647,-51.217658",
       status: { id: 1, name: "Ativo", color: "#24b92b" },
       activeUsers: 3,
     },
@@ -167,6 +170,7 @@ export async function getLabsMap() {
       id: 5,
       name: "Laboratório Nordeste",
       city: "Salvador",
+      coordinates: "-12.977749,-38.501629",
       status: { id: 2, name: "Inativo", color: "#fd2a2a" },
       activeUsers: 0,
     },
@@ -174,6 +178,7 @@ export async function getLabsMap() {
       id: 6,
       name: "Laboratório Centro-Oeste",
       city: "Brasília",
+      coordinates: "-15.793889,-47.882778",
       status: { id: 1, name: "Ativo", color: "#24b92b" },
       activeUsers: 7,
     },

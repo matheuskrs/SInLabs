@@ -1,11 +1,12 @@
 import styles from "./labsMap.module.css";
-import { use } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { use, useState } from "react";
 import { getLabsMap } from "~/services/AccessManagement/accessManagement.api";
 import TabHeader from "~/components/Tabs/TabHeader/TabHeader";
 import LabMapCard from "~/components/LabMapCard/LabMapCard";
+import LabsGoogleMap from "~/components/LabsGoogleMap/LabsGoogleMap";
+
 const labsPromise = getLabsMap();
+
 function downloadCsv(filename, csvText) {
   const blob = new Blob(["\ufeff" + csvText], {
     type: "text/csv;charset=utf-8;",
@@ -46,6 +47,8 @@ function labsToCsv(labs) {
 
 export default function LabsMapTab() {
   const labs = use(labsPromise);
+  const [selectedLabId, setSelectedLabId] = useState(null);
+
   const exportCsv = () => {
     const csv = labsToCsv(labs);
     downloadCsv("mapa-laboratorios", csv);
@@ -56,25 +59,23 @@ export default function LabsMapTab() {
   return (
     <>
       <TabHeader title="Mapa de laboratórios" exportCsv={exportCsv} />
-      <div className={styles["tab-content"]}>
-        <div className={styles["map-preview"]}>
-          <FontAwesomeIcon
-            icon={faLocationDot}
-            className={styles["map-icon"]}
-          />
 
-          <div className={styles["map-title"]}>
-            Mapa interativo de laboratórios
-          </div>
-          <div className={styles["map-subtitle"]}>
-            Visualização geográfica dos laboratórios
-          </div>
-        </div>
+      <div className={styles["tab-content"]}>
+        <LabsGoogleMap
+          labs={labs}
+          selectedLabId={selectedLabId}
+          onSelectLab={setSelectedLabId}
+        />
 
         {hasLabs ? (
           <div className={styles["labmap-list"]}>
             {labs.map((lab) => (
-              <LabMapCard key={lab.id} lab={lab} />
+              <LabMapCard
+                key={lab.id}
+                lab={lab}
+                selected={lab.id === selectedLabId}
+                onClick={() => setSelectedLabId(lab.id)}
+              />
             ))}
           </div>
         ) : (
