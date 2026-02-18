@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { getLabsMap } from "~/services/AccessManagement/accessManagement.api";
 import TabHeader from "~/components/Tabs/TabHeader/TabHeader";
+import LabMapCard from "../../../../components/LabMapCard/LabMapCard";
 
 function downloadCsv(filename, csvText) {
   const blob = new Blob(["\ufeff" + csvText], {
@@ -41,31 +42,6 @@ function labsToCsv(labs) {
   ];
 
   return lines.join("\n");
-}
-
-function LabMapCard({ lab }) {
-  const status = lab?.status;
-
-  return (
-    <div className={styles["labmap-card"]}>
-      <div className={styles["labmap-card-header"]}>
-        <span className={styles["labmap-lab-name"]}>{lab?.name}</span>
-
-        <span
-          className={styles["labmap-status-dot"]}
-          style={{ backgroundColor: status?.color }}
-          title={status?.name}
-        />
-      </div>
-
-      <div className={styles["labmap-city"]}>{lab?.city}</div>
-
-      <div className={styles["labmap-users"]}>
-        <span className={styles["active-users"]}>{lab?.activeUsers}</span>{" "}
-        usuários ativos
-      </div>
-    </div>
-  );
 }
 
 export default function LabsMapTab() {
