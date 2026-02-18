@@ -1,11 +1,11 @@
 import styles from "./labsMap.module.css";
-import { useEffect, useState } from "react";
+import { use } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { getLabsMap } from "~/services/AccessManagement/accessManagement.api";
 import TabHeader from "~/components/Tabs/TabHeader/TabHeader";
 import LabMapCard from "../../../../components/LabMapCard/LabMapCard";
-
+const labsPromise = getLabsMap();
 function downloadCsv(filename, csvText) {
   const blob = new Blob(["\ufeff" + csvText], {
     type: "text/csv;charset=utf-8;",
@@ -45,16 +45,7 @@ function labsToCsv(labs) {
 }
 
 export default function LabsMapTab() {
-  const [labs, setLabs] = useState([]);
-
-  useEffect(() => {
-    async function load() {
-      const data = await getLabsMap();
-      setLabs(data);
-    }
-    load();
-  }, []);
-
+  const labs = use(labsPromise);
   const exportCsv = () => {
     const csv = labsToCsv(labs);
     downloadCsv("mapa-laboratorios", csv);

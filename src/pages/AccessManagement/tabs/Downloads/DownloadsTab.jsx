@@ -1,5 +1,5 @@
 import styles from "./downloads.module.css";
-import { useEffect, useMemo, useState } from "react";
+import { use, useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { DataGrid, useGridApiRef } from "@mui/x-data-grid";
@@ -54,24 +54,13 @@ function weekToCsv(week) {
 
   return lines.join("\n");
 }
-
+const downloadsWeekPromise = getDownloadsWeek();
+const downloadsHistoryPromise = getDownloadsHistory();
 export default function DownloadsTab() {
   const apiRef = useGridApiRef();
   const isMobile = useMediaQuery("(max-width:700px)");
-  const [weekData, setWeekData] = useState([]);
-  const [rows, setRows] = useState([]);
-
-  useEffect(() => {
-    async function load() {
-      const [week, history] = await Promise.all([
-        getDownloadsWeek(),
-        getDownloadsHistory(),
-      ]);
-      setWeekData(week);
-      setRows(history);
-    }
-    load();
-  }, []);
+  const weekData = use(downloadsWeekPromise);
+  const rows = use(downloadsHistoryPromise);
 
   const exportCsv = () => {
     const csv = weekToCsv(weekData);

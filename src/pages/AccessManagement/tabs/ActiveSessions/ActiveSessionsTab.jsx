@@ -1,5 +1,5 @@
 import styles from "./activeSessions.module.css";
-import { useEffect, useMemo, useState } from "react";
+import { use, useMemo, useState } from "react";
 import { Select, MenuItem } from "@mui/material";
 
 import { getActiveSessions } from "~/services/AccessManagement/accessManagement.api";
@@ -9,7 +9,7 @@ import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext
 import ActiveSessionCard from "~/components/ActiveSessionsCard/ActiveSessionCard";
 import { useMediaQuery } from "@mui/material";
 import TabHeader from "~/components/Tabs/TabHeader/TabHeader";
-
+const activeSessionsPromise = getActiveSessions();
 function downloadCsv(filename, csvText) {
   const blob = new Blob(["\ufeff" + csvText], {
     type: "text/csv;charset=utf-8;",
@@ -49,7 +49,7 @@ function sessionsToCsv(sessions) {
 }
 
 export default function ActiveSessionsTab() {
-  const [sessions, setSessions] = useState([]);
+  const sessions = use(activeSessionsPromise);
   const { confirm, ConfirmDialog } = useConfirm();
   const toast = useToast();
   const { showLoading, hideLoading } = useGlobalLoading();
@@ -58,14 +58,6 @@ export default function ActiveSessionsTab() {
   const [page, setPage] = useState(1);
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-  useEffect(() => {
-    async function load() {
-      const data = await getActiveSessions();
-      setSessions(data);
-    }
-    load();
-  }, []);
 
   const totalItems = sessions.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));

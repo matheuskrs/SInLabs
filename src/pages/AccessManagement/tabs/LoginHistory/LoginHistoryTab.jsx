@@ -1,22 +1,14 @@
 import styles from "./loginHistory.module.css";
-import { useEffect, useMemo, useState } from "react";
+import { use, useMemo } from "react";
 import { DataGrid, useGridApiRef } from "@mui/x-data-grid";
 import { ptBR } from "@mui/x-data-grid/locales";
 import "~/styles/commonGrid.css";
 import { getLoginHistory } from "~/services/AccessManagement/accessManagement.api";
 import TabHeader from "~/components/Tabs/TabHeader/TabHeader";
+const loginHistoryPromise = getLoginHistory();
 export default function LoginHistoryTab() {
   const apiRef = useGridApiRef();
-  const [rows, setRows] = useState([]);
-
-  useEffect(() => {
-    async function loadData() {
-      const data = await getLoginHistory();
-      setRows(data);
-    }
-    loadData();
-  }, []);
-
+  const rows = use(loginHistoryPromise);
   const columns = useMemo(
     () => [
       { field: "user", headerName: "Usuário", flex: 1, minWidth: 200 },
