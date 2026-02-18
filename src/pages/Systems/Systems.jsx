@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, use } from "react";
 import { useMediaQuery, Select, MenuItem } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -19,6 +19,8 @@ import {
 } from "~/services/Systems/systemsService.api";
 import SystemCard from "~/components/SystemCard/SystemCard";
 import Header from "~/components/Header/Header";
+const systemsPromise = getSystems();
+const systemCategoriesPromise = getSystemCategories();
 
 export default function Systems() {
   const isMobile = useMediaQuery("(max-width:700px)");
@@ -28,27 +30,12 @@ export default function Systems() {
   const [categoryFilter, setCategoryFilter] = useState(0);
   const { showLoading, hideLoading } = useGlobalLoading();
   const { confirm, ConfirmDialog } = useConfirm();
-  const [systems, setSystems] = useState([]);
-  const [systemCategories, setSystemCategories] = useState([]);
   const [searchFilter, setSearchFilter] = useState("");
   const [pageSize, setPageSize] = useState(10);
   const page = 1;
-
+  const systems = use(systemsPromise);
+  const systemCategories = use(systemCategoriesPromise);
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  useEffect(() => {
-    async function loadSystems() {
-      const data = await getSystems();
-      setSystems(data);
-    }
-    loadSystems();
-
-    async function loadSystemCategories() {
-      const data = await getSystemCategories();
-      setSystemCategories(Array.isArray(data) ? data : []);
-    }
-    loadSystemCategories();
-  }, []);
-
   const fileRef = useRef(null);
   const coverFileRef = useRef(null);
   const systemFileRef = useRef(null);
