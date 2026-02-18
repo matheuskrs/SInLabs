@@ -1,5 +1,5 @@
 import styles from "./users.module.css";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext.jsx";
 import { useConfirm } from "~/components/ConfirmationDialog/UseConfirm.jsx";
 import { useToast } from "~/providers/Toast/useToast.jsx";
@@ -17,16 +17,19 @@ import { DataGrid } from "@mui/x-data-grid";
 import { ptBR } from "@mui/x-data-grid/locales";
 import Modal from "~/components/Modal/Modal.jsx";
 import "~/styles/commonGrid.css";
-import { getUsers, getUserStatus } from "../../services/Users/usersService.api";
-import { getAccessProfiles } from "../../services/ProfileManagement/profileAccessService.api";
-import { getLaboratories } from "../../services/Laboratories/laboratoriesService.api";
-import Header from "../../components/Header/Header";
-
+import { getUsers, getUserStatus } from "~/services/Users/usersService.api";
+import { getAccessProfiles } from "~/services/ProfileManagement/profileAccessService.api";
+import { getLaboratories } from "~/services/Laboratories/laboratoriesService.api";
+import Header from "~/components/Header/Header";
+const usersPromise = getUsers();
+const profilesPromise = getAccessProfiles();
+const userStatusPromise = getUserStatus();
+const laboratoriesPromise = getLaboratories();
 export default function Users() {
-  const [rows, setRows] = useState([]);
-  const [profileOptions, setProfileOptions] = useState([]);
-  const [headerLaboratoryOptions, setLaboratories] = useState([]);
-  const [userStatusOptions, setUserStatusOptions] = useState([]);
+  const rows = use(usersPromise);
+  const profileOptions = use(profilesPromise);
+  const headerLaboratoryOptions = use(laboratoriesPromise);
+  const userStatusOptions = use(userStatusPromise);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState(search);
   const [profileFilter, setProfileFilter] = useState(0);
@@ -39,32 +42,6 @@ export default function Users() {
   const toast = useToast();
   const isMobile = useMediaQuery("(max-width:700px)");
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-  useEffect(() => {
-    async function loadUsers() {
-      const data = await getUsers();
-      setRows(data);
-    }
-    loadUsers();
-
-    async function loadProfiles() {
-      const data = await getAccessProfiles();
-      setProfileOptions(data);
-    }
-    loadProfiles();
-
-    async function loadUserStatus() {
-      const data = await getUserStatus();
-      setUserStatusOptions(data);
-    }
-    loadUserStatus();
-
-    async function loadLaboratories() {
-      const data = await getLaboratories();
-      setLaboratories(data);
-    }
-    loadLaboratories();
-  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -277,7 +254,7 @@ export default function Users() {
     },
     [confirm, toast, showLoading, hideLoading],
   );
-  
+
   const filteredRows = useMemo(() => {
     const searchLower = String(debouncedSearch || "")
       .toLowerCase()
