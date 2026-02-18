@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { use, useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -12,33 +12,30 @@ import { getSystems } from "~/services/Systems/systemsService.api";
 import { useConfirm } from "~/components/ConfirmationDialog/UseConfirm";
 import { useToast } from "~/providers/Toast/useToast";
 
-export default function Associations() {
-  const [users, setUsers] = useState([]);
-  const [profiles, setProfiles] = useState([]);
-  const [systems, setSystems] = useState([]);
+const usersPromise = getUsers();
+const profilesPromise = getAccessProfiles();
+const systemsPromise = getSystems();
 
+export default function Associations() {
   const [userSearch, setUserSearch] = useState("");
 
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [selectedLaboratory, setSelectedLaboratory] = useState(null);
   const [selectedSystem, setSelectedSystem] = useState(null);
+
   const { confirm, ConfirmDialog } = useConfirm();
   const toast = useToast();
+
   const canConfirm =
     !!selectedUser &&
     !!selectedProfile &&
     !!selectedLaboratory &&
     !!selectedSystem;
 
-  useEffect(() => {
-    async function load() {
-      setUsers(await getUsers());
-      setProfiles(await getAccessProfiles());
-      setSystems(await getSystems());
-    }
-    load();
-  }, []);
+  const users = use(usersPromise);
+  const profiles = use(profilesPromise);
+  const systems = use(systemsPromise);
 
   const filteredUsers = useMemo(() => {
     const term = userSearch.toLowerCase();
@@ -55,6 +52,7 @@ export default function Associations() {
       message: `Tem certeza que deseja associar "${selectedUser.name}" às permissões escolhidas?`,
     });
     if (!ok) return;
+
     toast.success(
       "Sucesso",
       `Associação realizada com sucesso para "${selectedUser.name}".`,
@@ -92,7 +90,7 @@ export default function Associations() {
             </div>
 
             <div className={styles["scrollable-container"]}>
-              {filteredUsers.length == 0 ? (
+              {filteredUsers.length === 0 ? (
                 <div className={styles["empty-state"]}>
                   <h3>Nenhum usuário encontrado</h3>
                   <p>
@@ -185,7 +183,8 @@ export default function Associations() {
 
             {!selectedUser ? (
               <p className={styles["empty-text"]}>
-                Nenhum laboratório existente, selecione um usuário para visualizar seus laboratórios disponíveis.
+                Nenhum laboratório existente, selecione um usuário para
+                visualizar seus laboratórios disponíveis.
               </p>
             ) : selectedUser.laboratories?.length === 0 ? (
               <p className={styles["empty-text"]}>
@@ -214,7 +213,9 @@ export default function Associations() {
               {systems.map((sys) => (
                 <li
                   key={sys.id}
-                  className={selectedSystem?.id === sys.id ? styles["active"] : ""}
+                  className={
+                    selectedSystem?.id === sys.id ? styles["active"] : ""
+                  }
                   onClick={() => setSelectedSystem(sys)}
                 >
                   {sys.name}
@@ -224,6 +225,7 @@ export default function Associations() {
           </div>
         </div>
       </div>
+
       {ConfirmDialog}
     </div>
   );
