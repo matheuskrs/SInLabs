@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "./SmartImage.module.css";
+import styles from "./smartImage.module.css";
 
 export default function SmartImage({
   src,
