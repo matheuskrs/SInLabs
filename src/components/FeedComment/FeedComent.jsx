@@ -12,6 +12,7 @@ import { getPostCommentReplies } from "~/services/Feed/feedService.api";
 import { useToast } from "~/providers/Toast/useToast";
 import styles from "./feedComment.module.css";
 import Tooltip from "~/components/Tooltip/Tooltip";
+import SmartImage from "~/components/SmartImage/SmartImage";
 const COMMENT_TRUNCATE_LIMIT = 100;
 
 export default function FeedComment({
@@ -105,11 +106,7 @@ export default function FeedComment({
       <div className={styles["comment-main"]}>
         <div className={styles["comment-avatar-wrapper"]}>
           {comment?.user?.avatarUrl ? (
-            <img
-              className={styles["comment-avatar"]}
-              src={comment.user.avatarUrl}
-              alt=""
-            />
+            <SmartImage src={comment.user.avatarUrl} alt={comment?.user?.name} wrapperClassName={styles["comment-avatar"]}/>
           ) : null}
         </div>
 

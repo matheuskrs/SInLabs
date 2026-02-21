@@ -21,6 +21,7 @@ import { useToast } from "~/providers/Toast/useToast";
 import FeedComment from "~/components/FeedComment/FeedComent";
 import Modal from "~/components/Modal/Modal";
 import { formatRelativeDate } from "~/utils/date";
+import SmartImage from "~/components/SmartImage/SmartImage";
 
 export default function FeedPost({ post }) {
   const isVerySmall = useMediaQuery("(max-width:400px)");
@@ -105,7 +106,7 @@ export default function FeedPost({ post }) {
       <div className={styles["post-header"]}>
         <div className={styles["user-info"]}>
           <div className={styles["user-img-wrapper"]}>
-            {post ? <img src={post.userAvatarUrl} /> : null}
+            {post ? <SmartImage src={post.userAvatarUrl} alt={post.creatorName}/> : null}
           </div>
 
           <div className={styles["user-details"]}>
@@ -159,7 +160,10 @@ export default function FeedPost({ post }) {
 
         {post && post.postImg ? (
           <div className={styles["body-img-wrapper"]}>
-            <img src={post.postImg} />
+            <SmartImage
+              src={post.postImg}
+              alt={post.text}
+            />
           </div>
         ) : null}
       </div>
@@ -191,7 +195,9 @@ export default function FeedPost({ post }) {
         </div>
 
         {isCommentsOpen && (
-          <div className={`${styles["replybox"]} ${styles["post-comment-textbox"]}`}>
+          <div
+            className={`${styles["replybox"]} ${styles["post-comment-textbox"]}`}
+          >
             <div className={styles["replybox-avatar"]}>
               <span className={styles["replybox-avatar-fallback"]}>
                 <FontAwesomeIcon icon={faUser} />
@@ -214,7 +220,11 @@ export default function FeedPost({ post }) {
                   onClick={handleSubmitComment}
                   disabled={!commentText.trim()}
                 >
-                  {isMobile ? <FontAwesomeIcon icon={faPaperPlane} /> : "Comentar"}
+                  {isMobile ? (
+                    <FontAwesomeIcon icon={faPaperPlane} />
+                  ) : (
+                    "Comentar"
+                  )}
                 </button>
               </div>
             </div>

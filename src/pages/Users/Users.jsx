@@ -21,6 +21,7 @@ import { getUsers, getUserStatus } from "~/services/Users/usersService.api";
 import { getAccessProfiles } from "~/services/ProfileManagement/profileAccessService.api";
 import { getLaboratories } from "~/services/Laboratories/laboratoriesService.api";
 import Header from "~/components/Header/Header";
+import SmartImage from "~/components/SmartImage/SmartImage";
 const usersPromise = getUsers();
 const profilesPromise = getAccessProfiles();
 const userStatusPromise = getUserStatus();
@@ -473,6 +474,9 @@ export default function Users() {
           },
     );
   }, [isMobile, mobileColumns, desktopColumns, onOpenEdit, confirmDelete]);
+  useEffect(() => {
+    hideLoading();
+  }, [hideLoading]);
 
   return (
     <div>
@@ -604,9 +608,9 @@ export default function Users() {
                   }
                 >
                   {previewImg && (
-                    <img
-                      className={styles["modal-avatar-preview"]}
+                    <SmartImage
                       src={previewImg}
+                      wrapperClassName={"modal-avatar-preview"}
                     />
                   )}
                   <span className={styles["modal-avatar-upload"]}>
