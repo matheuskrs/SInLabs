@@ -118,7 +118,7 @@ export default function Laboratories() {
         city: data.localidade || prev.city,
         uf: data.uf || prev.uf,
       }));
-      toast.success("CEP encontrado com sucesso!");
+      toast.success("Sucesso", "CEP encontrado com sucesso!");
     } catch {
       toast.error("Erro", "Falha ao buscar CEP");
     } finally {
