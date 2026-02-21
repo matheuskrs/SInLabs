@@ -16,12 +16,13 @@ import { Select, MenuItem, CircularProgress } from "@mui/material";
 import { useMediaQuery } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { useToast } from "~/providers/Toast/useToast";
+import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
 
 export default function Feed() {
   const isTablet = useMediaQuery("(max-width:1024px)");
   const { search } = useLocation();
   const toast = useToast();
-
+  const { hideLoading } = useGlobalLoading();
   const [selectedLabId, setSelectedLabId] = useState(0);
   const [selectedCategoryId, setSelectedCategoryId] = useState(0);
 
@@ -109,6 +110,9 @@ export default function Feed() {
 
   const isInitialLoading =
     posts.length === 0 && labs.length === 0 && categories.length === 0;
+  useEffect(() => {
+      hideLoading();
+    }, [hideLoading]);
 
   return (
     <div className={styles["main"]}>

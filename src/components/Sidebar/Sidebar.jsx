@@ -110,9 +110,7 @@ export default function Sidebar() {
 
   const handleNavigate = async (path) => {
     showLoading("Carregando página")
-    await sleep(600);
     navigator(path);
-    hideLoading();
   };
   return (
     <aside

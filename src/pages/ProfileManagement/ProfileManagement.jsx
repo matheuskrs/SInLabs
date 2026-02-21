@@ -8,7 +8,7 @@ import { useConfirm } from "~/components/ConfirmationDialog/UseConfirm";
 import styles from "./profileManagement.module.css";
 import { useMediaQuery } from "@mui/material";
 import { Select, MenuItem } from "@mui/material";
-import { use, useMemo, useCallback, useState } from "react";
+import { use, useMemo, useCallback, useState, useEffect } from "react";
 import Tooltip from "~/components/Tooltip/Tooltip";
 import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
 import { useToast } from "~/providers/Toast/useToast";
@@ -285,6 +285,9 @@ export default function ProfileManagement() {
           },
     );
   }, [isMobile, mobileColumns, desktopColumns, onOpenEdit, confirmDelete]);
+  useEffect(() => {
+    hideLoading();
+  }, [hideLoading]);
 
   return (
     <div>

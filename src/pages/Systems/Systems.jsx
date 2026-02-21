@@ -167,6 +167,9 @@ export default function Systems() {
   const showingFrom = totalItems === 0 ? 0 : startIndex + 1;
   const showingTo = Math.min(startIndex + pagedSystems.length, totalItems);
   const showingText = `Mostrando ${showingFrom} a ${showingTo} de ${totalItems} sistemas`;
+  useEffect(() => {
+    hideLoading();
+  }, [hideLoading]);
 
   return (
     <div>

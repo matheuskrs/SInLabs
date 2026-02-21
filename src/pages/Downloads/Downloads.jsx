@@ -1,4 +1,4 @@
-import { use, useMemo, useState } from "react";
+import { use, useEffect, useMemo, useState } from "react";
 import { MenuItem, Select, useMediaQuery } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -12,12 +12,14 @@ import {
   getSystemCategories,
 } from "~/services/Systems/systemsService.api";
 import DownloadCard from "~/components/DownloadCard/DownloadCard";
+import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
 
 const systemsPromise = getSystems();
 const systemCategoriesPromise = getSystemCategories();
 
 export default function Downloads() {
   const isMobile = useMediaQuery("(max-width:700px)");
+  const { hideLoading } = useGlobalLoading();
 
   const [searchFilter, setSearchFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState(0);
@@ -88,6 +90,9 @@ export default function Downloads() {
   const showingFrom = totalItems === 0 ? 0 : startIndex + 1;
   const showingTo = Math.min(startIndex + pagedSystems.length, totalItems);
   const showingText = `Mostrando ${showingFrom} a ${showingTo} de ${totalItems} sistemas`;
+  useEffect(() => {
+    hideLoading();
+  }, [hideLoading]);
 
   return (
     <div>

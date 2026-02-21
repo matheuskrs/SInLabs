@@ -1,8 +1,9 @@
 import styles from "./accessManagement.module.css";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Header from "~/components/Header/Header";
 import accessManagementImg from "~/assets/AccessManagement/accessManagementImg.png";
 import Tabs from "~/components/Tabs/Tabs";
+import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
 
 import LoginHistoryTab from "./tabs/LoginHistory/LoginHistoryTab";
 import ActiveSessionsTab from "./tabs/ActiveSessions/ActiveSessionsTab";
@@ -11,6 +12,7 @@ import LabsMapTab from "./tabs/LabsMap/LabsMapTab";
 
 export default function AccessManagement() {
   const [activeTab, setActiveTab] = useState("login-history");
+  const { hideLoading } = useGlobalLoading();
 
   const tabs = useMemo(
     () => [
@@ -21,6 +23,10 @@ export default function AccessManagement() {
     ],
     [],
   );
+
+  useEffect(() => {
+    hideLoading();
+  }, [hideLoading]);
 
   return (
     <div>

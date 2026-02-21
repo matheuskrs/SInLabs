@@ -264,6 +264,9 @@ export default function Laboratories() {
   const showingFrom = totalItems === 0 ? 0 : startIndex + 1;
   const showingTo = Math.min(startIndex + pagedLaboratories.length, totalItems);
   const showingText = `Mostrando ${showingFrom} a ${showingTo} de ${totalItems} laboratórios`;
+  useEffect(() => {
+    hideLoading();
+  }, [hideLoading]);
 
   return (
     <div>

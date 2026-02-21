@@ -1,4 +1,4 @@
-import { use, useMemo, useState } from "react";
+import { use, useEffect, useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -11,6 +11,7 @@ import { getAccessProfiles } from "~/services/ProfileManagement/profileAccessSer
 import { getSystems } from "~/services/Systems/systemsService.api";
 import { useConfirm } from "~/components/ConfirmationDialog/UseConfirm";
 import { useToast } from "~/providers/Toast/useToast";
+import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
 
 const usersPromise = getUsers();
 const profilesPromise = getAccessProfiles();
@@ -18,6 +19,7 @@ const systemsPromise = getSystems();
 
 export default function Associations() {
   const [userSearch, setUserSearch] = useState("");
+  const { hideLoading } = useGlobalLoading();
 
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedProfile, setSelectedProfile] = useState(null);
@@ -66,6 +68,10 @@ export default function Associations() {
     setSelectedLaboratory(null);
     setSelectedSystem(null);
   };
+
+  useEffect(() => {
+    hideLoading();
+  }, [hideLoading]);
 
   return (
     <div>
