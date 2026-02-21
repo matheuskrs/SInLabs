@@ -9,6 +9,7 @@ import styles from "./associations.module.css";
 import { getUsers } from "~/services/Users/usersService.api";
 import { getAccessProfiles } from "~/services/ProfileManagement/profileAccessService.api";
 import { getSystems } from "~/services/Systems/systemsService.api";
+import { getLaboratories } from "~/services/Laboratories/laboratoriesService.api";
 import { useConfirm } from "~/components/ConfirmationDialog/UseConfirm";
 import { useToast } from "~/providers/Toast/useToast";
 import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
@@ -16,6 +17,7 @@ import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext
 const usersPromise = getUsers();
 const profilesPromise = getAccessProfiles();
 const systemsPromise = getSystems();
+const laboratoriesPromise = getLaboratories();
 
 export default function Associations() {
   const [userSearch, setUserSearch] = useState("");
@@ -29,15 +31,16 @@ export default function Associations() {
   const { confirm, ConfirmDialog } = useConfirm();
   const toast = useToast();
 
-  const canConfirm =
-    !!selectedUser &&
-    !!selectedProfile &&
-    !!selectedLaboratory &&
-    !!selectedSystem;
-
   const users = use(usersPromise);
   const profiles = use(profilesPromise);
   const systems = use(systemsPromise);
+  const laboratories = use(laboratoriesPromise);
+
+  const profilesById = useMemo(() => {
+    const map = new Map();
+    for (const p of profiles) map.set(p.id, p);
+    return map;
+  }, [profiles]);
 
   const filteredUsers = useMemo(() => {
     const term = userSearch.toLowerCase();
@@ -47,6 +50,12 @@ export default function Associations() {
         u.email.toLowerCase().includes(term),
     );
   }, [users, userSearch]);
+
+  const canConfirm =
+    !!selectedUser &&
+    !!selectedProfile &&
+    !!selectedLaboratory &&
+    !!selectedSystem;
 
   const onConfirmAssociation = async () => {
     const ok = await confirm({
@@ -64,7 +73,7 @@ export default function Associations() {
 
   const onSelectUser = (user) => {
     setSelectedUser(user);
-    setSelectedProfile(null);
+    setSelectedProfile(profilesById.get(user.profileId) ?? null);
     setSelectedLaboratory(null);
     setSelectedSystem(null);
   };
@@ -168,37 +177,39 @@ export default function Associations() {
 
         <div className={styles["association-row"]}>
           <div className={styles["association-card"]}>
-            <h3>Perfis</h3>
-            <ul className={styles["selectable-list"]}>
-              {profiles.map((p) => (
+            <h3>Perfil</h3>
+
+            {!selectedUser ? (
+              <p className={styles["empty-text"]}>
+                Selecione um usuário para visualizar seu perfil disponível.
+              </p>
+            ) : !selectedProfile ? (
+              <p className={styles["empty-text"]}>
+                Este usuário não possui perfil associado.
+              </p>
+            ) : (
+              <ul className={styles["selectable-list"]}>
                 <li
-                  key={p.id}
-                  className={
-                    selectedProfile?.id === p.id ? styles["active"] : ""
-                  }
-                  onClick={() => setSelectedProfile(p)}
+                  key={selectedProfile.id}
+                  className={styles["active"]}
+                  onClick={() => setSelectedProfile(selectedProfile)}
                 >
-                  {p.name}
+                  {selectedProfile.name}
                 </li>
-              ))}
-            </ul>
+              </ul>
+            )}
           </div>
 
           <div className={styles["association-card"]}>
             <h3>Laboratórios</h3>
 
-            {!selectedUser ? (
+            {laboratories.length === 0 ? (
               <p className={styles["empty-text"]}>
-                Nenhum laboratório existente, selecione um usuário para
-                visualizar seus laboratórios disponíveis.
-              </p>
-            ) : selectedUser.laboratories?.length === 0 ? (
-              <p className={styles["empty-text"]}>
-                Este usuário não possui laboratórios associados.
+                Não existem laboratórios cadastrados.
               </p>
             ) : (
               <ul className={styles["selectable-list"]}>
-                {selectedUser.laboratories.map((lab) => (
+                {laboratories.map((lab) => (
                   <li
                     key={lab.id}
                     className={

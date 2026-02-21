@@ -13,6 +13,7 @@ export async function getUsers() {
       avatarUrl: Avatar,
       email: "camila.alves@unesp.com.br",
       profile: "Administrador",
+      profileId: 1,
       laboratories: [
         { id: 1, name: "Laboratório Central" },
         { id: 3, name: "Laboratório Minas" },
@@ -26,6 +27,7 @@ export async function getUsers() {
       avatarUrl: Avatar1,
       email: "thais.morais@unesp.com.br",
       profile: "Coordenador",
+      profileId: 2,
       laboratories: [{ id: 2, name: "Laboratório Norte" }],
       status: { id: 2, name: "Inativo", color: "#fd2a2a" },
       lastAccess: "2025-02-10",
@@ -36,6 +38,7 @@ export async function getUsers() {
       avatarUrl: Avatar2,
       email: "ana.antunes@unesp.com.br",
       profile: "Técnico",
+      profileId: 3,
       laboratories: [
         { id: 3, name: "Laboratório Minas" },
         { id: 6, name: "Laboratório Centro-Oeste" },
