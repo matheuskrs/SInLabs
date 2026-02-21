@@ -3,7 +3,7 @@ import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
 import styles from "./labsGoogleMap.module.css";
 
 setOptions({
-  apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+  key: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
   version: "weekly",
 });
 
@@ -50,6 +50,7 @@ export default function LabsGoogleMap({ labs, selectedLabId, onSelectLab }) {
     mapRef.current = new mapsLib.Map(mapDivRef.current, {
       center,
       zoom: first ? 12 : 5,
+      key: "a"
     });
 
     infoRef.current = new google.maps.InfoWindow();
