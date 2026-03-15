@@ -1,5 +1,7 @@
 .laboratory-card {
   width: 100%;
+  max-width: 420px;
+  flex: 1 1 320px;
   border: 2px solid #eee;
   border-radius: 12px;
   padding: 14px;
