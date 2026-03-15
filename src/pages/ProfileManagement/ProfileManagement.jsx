@@ -62,6 +62,13 @@ export default function ProfileManagement() {
   const desktopColumns = useMemo(
     () => [
       {
+        field: "actions",
+        headerName: "Ações",
+        minWidth: 80,
+        sortable: false,
+        filterable: false,
+      },
+      {
         field: "name",
         headerName: "Perfil",
         flex: 1,
@@ -146,22 +153,15 @@ export default function ProfileManagement() {
           );
         },
       },
-      {
-        field: "actions",
-        headerName: "Ações",
-        minWidth: 80,
-        sortable: false,
-        filterable: false,
-      },
     ],
     [isMobile, profileFilterStatus],
   );
 
   const mobileColumns = useMemo(
     () => [
+      desktopColumns.find((col) => col.field === "actions"),
       desktopColumns.find((col) => col.field === "name"),
       desktopColumns.find((col) => col.field === "profileStatusId"),
-      desktopColumns.find((col) => col.field === "actions"),
     ],
     [desktopColumns],
   );
@@ -360,9 +360,34 @@ export default function ProfileManagement() {
           profileId === 0 ? "Novo perfil de acesso" : "Editar perfil de acesso"
         }
         onClose={() => setOpenModal(false)}
+        modalClassName={styles["modal-md"]}
+        footer={(close) => (
+          <>
+            <div className={styles["modal-actions"]}>
+              <button
+                type="submit"
+                form="profile-form"
+                className={styles["btn-submit-profile"]}
+              >
+                Salvar
+              </button>
+              <button
+                type="button"
+                className={styles["btn-cancel"]}
+                onClick={close}
+              >
+                Cancelar
+              </button>
+            </div>
+          </>
+        )}
       >
-        {(close) => (
-          <form className={styles["modal-form"]} onSubmit={onSubmitModal}>
+        {() => (
+          <form
+            className={styles["modal-form"]}
+            id="profile-form"
+            onSubmit={onSubmitModal}
+          >
             <div className={styles.field}>
               <label>Nome *</label>
               <input
@@ -409,19 +434,6 @@ export default function ProfileManagement() {
                   </label>
                 ))}
               </div>
-            </div>
-
-            <div className={styles["modal-actions"]}>
-              <button type="submit" className={styles["btn-submit-profile"]}>
-                Salvar
-              </button>
-              <button
-                type="button"
-                className={styles["btn-cancel"]}
-                onClick={close}
-              >
-                Cancelar
-              </button>
             </div>
           </form>
         )}
