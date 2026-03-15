@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "~/providers/Toast/useToast";
 import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
 import { useMediaQuery } from "@mui/material";
+import SmartImage from "~/components/SmartImage/SmartImage";
 
 export default function LoginPage() {
   const isMobile = useMediaQuery("(max-width:700px)");
@@ -69,11 +70,7 @@ export default function LoginPage() {
 
   return (
     <form className={styles["login-card"]} onSubmit={handleLogin}>
-      <img
-        src={logo}
-        alt={import.meta.env.VITE_APP_NAME}
-        className={styles["login-logo"]}
-      />
+      <SmartImage src={logo} alt={import.meta.env.VITE_APP_NAME} wrapperClassName={styles["login-logo"]}/>
 
       <div className={styles.field}>
         <label>E-mail</label>
