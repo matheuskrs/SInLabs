@@ -2,7 +2,14 @@ import { createPortal } from "react-dom";
 import { useState, useEffect, useRef } from "react";
 import styles from "./modal.module.css";
 
-export default function Modal({ open, title, onClose, children }) {
+export default function Modal({
+  open,
+  title,
+  onClose,
+  children,
+  footer,
+  modalClassName,
+}) {
   const [closing, setClosing] = useState(false);
   const startedOnBackdrop = useRef(false);
 
@@ -38,6 +45,9 @@ export default function Modal({ open, title, onClose, children }) {
   const content =
     typeof children === "function" ? children(handleClose) : children;
 
+  const footerContent =
+    typeof footer === "function" ? footer(handleClose) : footer;
+
   const onBackdropPointerDown = (e) => {
     startedOnBackdrop.current = e.target === e.currentTarget;
     if (startedOnBackdrop.current) handleClose();
@@ -54,7 +64,7 @@ export default function Modal({ open, title, onClose, children }) {
       onPointerUp={onBackdropPointerUp}
     >
       <div
-        className={`${styles.modal} ${closing ? styles.closing : ""}`}
+        className={`${styles.modal} ${modalClassName || ""} ${closing ? styles.closing : ""}`}
         onAnimationEnd={handleAnimationEnd}
         onPointerDown={(e) => e.stopPropagation()}
       >
@@ -66,6 +76,9 @@ export default function Modal({ open, title, onClose, children }) {
         </header>
 
         <div className={styles["modal-body"]}>{content}</div>
+        {footerContent && (
+          <div className={styles["modal-footer"]}>{footerContent}</div>
+        )}
       </div>
     </div>,
     document.body,

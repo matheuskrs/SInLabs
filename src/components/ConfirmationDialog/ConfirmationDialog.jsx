@@ -26,7 +26,7 @@ export default function ConfirmationDialog({
   };
 
   return (
-    <Modal open={open} title={title} onClose={handleCancel}>
+    <Modal open={open} title={title} onClose={handleCancel} modalClassName={styles["modal-sm"]}>
       {(close) => (
         <div className={styles["confirm-body"]}>
           <p className={styles["confirm-message"]}>{message}</p>
