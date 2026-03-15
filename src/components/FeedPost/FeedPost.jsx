@@ -262,6 +262,7 @@ export default function FeedPost({ post }) {
         open={openShareModal}
         title="Compartilhar"
         onClose={() => setOpenShareModal(false)}
+        modalClassName={styles["modal-sm"]}
       >
         <div className={styles["share-modal"]}>
           <div className={styles["share-modal-title"]}>
