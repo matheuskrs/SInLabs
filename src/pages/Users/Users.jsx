@@ -308,6 +308,13 @@ export default function Users() {
   const desktopColumns = useMemo(
     () => [
       {
+        field: "actions",
+        headerName: "Ações",
+        minWidth: 80,
+        sortable: false,
+        filterable: false,
+      },
+      {
         field: "name",
         headerName: "Usuário",
         flex: 1,
@@ -425,22 +432,15 @@ export default function Users() {
           );
         },
       },
-      {
-        field: "actions",
-        headerName: "Ações",
-        minWidth: 80,
-        sortable: false,
-        filterable: false,
-      },
     ],
     [isMobile],
   );
 
   const mobileColumns = useMemo(
     () => [
+      desktopColumns.find((c) => c.field === "actions"),
       desktopColumns.find((c) => c.field === "name"),
       desktopColumns.find((c) => c.field === "status"),
-      desktopColumns.find((c) => c.field === "actions"),
     ],
     [desktopColumns],
   );
@@ -589,8 +589,26 @@ export default function Users() {
         open={openModal}
         title={userId == 0 ? "Novo usuário" : "Editar usuário"}
         onClose={() => setOpenModal(false)}
+        footer={(close) => (
+          <div className={styles["modal-actions"]}>
+            <button
+              form="user-form"
+              type="submit"
+              className={styles["btn-submit-user"]}
+            >
+              Salvar
+            </button>
+            <button
+              type="button"
+              className={styles["btn-cancel"]}
+              onClick={close}
+            >
+              Cancelar
+            </button>
+          </div>
+        )}
       >
-        {(close) => (
+        {() => (
           <div className={styles.wrapper}>
             <form
               id="user-form"
@@ -769,22 +787,6 @@ export default function Users() {
                 </div>
               )}
             </form>
-            <div className={styles["modal-actions"]}>
-              <button
-                form="user-form"
-                type="submit"
-                className={styles["btn-submit-user"]}
-              >
-                Salvar
-              </button>
-              <button
-                type="button"
-                className={styles["btn-cancel"]}
-                onClick={close}
-              >
-                Cancelar
-              </button>
-            </div>
           </div>
         )}
       </Modal>

@@ -170,7 +170,9 @@ export default function Laboratories() {
 
   const onSubmitModal = async (e) => {
     e.preventDefault();
-    showLoading(laboratoryId == 0 ? "Criando Laboratório" : "Editando laboratório");
+    showLoading(
+      laboratoryId == 0 ? "Criando Laboratório" : "Editando laboratório",
+    );
     await sleep(100);
     setOpenModal(false);
     await sleep(1500);
@@ -385,209 +387,209 @@ export default function Laboratories() {
         open={openModal}
         title={laboratoryId === 0 ? "Novo laboratório" : "Editar laboratório"}
         onClose={() => setOpenModal(false)}
-      >
-        {(close) => (
-          <div className={styles.wrapper}>
-            <form
-              id="lab-form"
-              className={styles["modal-form"]}
-              onSubmit={onSubmitModal}
+        footer={(close) => (
+          <>
+            <button
+              form="lab-form"
+              type="submit"
+              className={styles["btn-submit-laboratory"]}
             >
-              <div className={styles["modal-avatar-row"]}>
-                <div
-                  className={styles["modal-avatar"]}
-                  onClick={onPickFile}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) =>
-                    e.key === "Enter" || e.key === " " ? onPickFile() : null
-                  }
-                >
-                  {previewImg && (
-                    <img
-                      className={styles["modal-avatar-preview"]}
-                      src={previewImg}
-                    />
-                  )}
-                  <span className={styles["modal-avatar-upload"]}>
-                    <FontAwesomeIcon icon={faUpload} />
-                  </span>
-                </div>
+              Salvar
+            </button>
+            <button
+              type="button"
+              className={styles["btn-cancel"]}
+              onClick={close}
+            >
+              Cancelar
+            </button>
+          </>
+        )}
+      >
+        {() => (
+          <form
+            id="lab-form"
+            className={styles["modal-form"]}
+            onSubmit={onSubmitModal}
+          >
+            <div className={styles["modal-avatar-row"]}>
+              <div
+                className={styles["modal-avatar"]}
+                onClick={onPickFile}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) =>
+                  e.key === "Enter" || e.key === " " ? onPickFile() : null
+                }
+              >
+                {previewImg && (
+                  <img
+                    className={styles["modal-avatar-preview"]}
+                    src={previewImg}
+                  />
+                )}
+                <span className={styles["modal-avatar-upload"]}>
+                  <FontAwesomeIcon icon={faUpload} />
+                </span>
+              </div>
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                onChange={onFileChange}
+                style={{ display: "none" }}
+              />
+            </div>
+
+            <div className={styles["modal-row"]}>
+              <div className={styles.field}>
+                <label>Nome *</label>
                 <input
-                  ref={fileRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={onFileChange}
-                  style={{ display: "none" }}
+                  type="text"
+                  placeholder="Nome do laboratório"
+                  required
+                  value={form.name}
+                  onChange={setField("name")}
+                  maxLength={100}
                 />
               </div>
-
-              <div className={styles["modal-row"]}>
-                <div className={styles.field}>
-                  <label>Nome *</label>
-                  <input
-                    type="text"
-                    placeholder="Nome do laboratório"
-                    required
-                    value={form.name}
-                    onChange={setField("name")}
-                    maxLength={100}
-                  />
-                </div>
-                <div className={styles.field}>
-                  <label>CNPJ *</label>
-                  <input
-                    type="text"
-                    placeholder="00.000.000/0000-00"
-                    required
-                    value={form.cnpj}
-                    onChange={setField("cnpj")}
-                  />
-                </div>
+              <div className={styles.field}>
+                <label>CNPJ *</label>
+                <input
+                  type="text"
+                  placeholder="00.000.000/0000-00"
+                  required
+                  value={form.cnpj}
+                  onChange={setField("cnpj")}
+                />
               </div>
-
-              <div className={styles["modal-row"]}>
-                <div className={styles.field}>
-                  <label>CEP *</label>
-                  <div className={styles["cep-row"]}>
-                    <input
-                      type="text"
-                      placeholder="00000-000"
-                      required
-                      value={form.cep}
-                      onChange={setField("cep")}
-                      inputMode="numeric"
-                    />
-                    <button
-                      type="button"
-                      className={styles["btn-cep-search"]}
-                      onClick={onSearchCEP}
-                    >
-                      Buscar
-                    </button>
-                  </div>
-                </div>
-
-                <div className={styles.field}>
-                  <label>Responsável</label>
-                  <input
-                    type="text"
-                    placeholder="Nome do responsável"
-                    value={form.responsible}
-                    onChange={setField("responsible")}
-                    maxLength={100}
-                  />
-                </div>
-              </div>
-
-              <div className={`${styles["modal-row"]} ${styles.single}`}>
-                <div className={styles.field}>
-                  <label>Endereço</label>
-                  <input
-                    type="text"
-                    placeholder="Rua, número, complemento"
-                    value={form.address}
-                    onChange={setField("address")}
-                    maxLength={100}
-                  />
-                </div>
-              </div>
-
-              <div className={styles["modal-row"]}>
-                <div className={styles.field}>
-                  <label>Cidade</label>
-                  <input
-                    type="text"
-                    placeholder="Cidade"
-                    value={form.city}
-                    onChange={setField("city")}
-                    maxLength={100}
-                  />
-                </div>
-                <div className={styles.field}>
-                  <label>Estado (UF)</label>
-                  <input
-                    type="text"
-                    placeholder="UF"
-                    maxLength={2}
-                    value={form.uf}
-                    onChange={setField("uf")}
-                  />
-                </div>
-              </div>
-
-              <div className={styles["modal-row"]}>
-                <div className={styles.field}>
-                  <label>Telefone</label>
-                  <input
-                    type="text"
-                    placeholder="(00) 00000-0000"
-                    value={form.phone}
-                    onChange={setField("phone")}
-                  />
-                </div>
-                <div className={styles.field}>
-                  <label>Email *</label>
-                  <input
-                    type="email"
-                    placeholder="email@dominio.com"
-                    required
-                    value={form.email}
-                    onChange={setField("email")}
-                    maxLength={70}
-                  />
-                </div>
-              </div>
-
-              <div className={styles["modal-row"]}>
-                <div className={styles.field}>
-                  <label>Status</label>
-                  <Select
-                    className={styles["select-modal"]}
-                    size="small"
-                    value={form.statusId}
-                    onChange={(e) =>
-                      setForm((prev) => ({ ...prev, statusId: e.target.value }))
-                    }
-                  >
-                    {statusOptions.map((s) => (
-                      <MenuItem key={s.id} value={s.id}>
-                        {s.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </div>
-                {isNew && (
-                  <div className={styles.field}>
-                    <label>Coordenadas GPS</label>
-                    <input
-                      type="text"
-                      placeholder="Coordenadas"
-                      value={form.coordinates}
-                      onChange={setField("coordinates")}
-                      maxLength={80}
-                    />
-                  </div>
-                )}
-              </div>
-            </form>
-            <div className={styles["modal-actions"]}>
-              <button
-                form="lab-form"
-                type="submit"
-                className={styles["btn-submit-laboratory"]}
-              >
-                Salvar
-              </button>
-              <button
-                type="button"
-                className={styles["btn-cancel"]}
-                onClick={close}
-              >
-                Cancelar
-              </button>
             </div>
-          </div>
+
+            <div className={styles["modal-row"]}>
+              <div className={styles.field}>
+                <label>CEP *</label>
+                <div className={styles["cep-row"]}>
+                  <input
+                    type="text"
+                    placeholder="00000-000"
+                    required
+                    value={form.cep}
+                    onChange={setField("cep")}
+                    inputMode="numeric"
+                  />
+                  <button
+                    type="button"
+                    className={styles["btn-cep-search"]}
+                    onClick={onSearchCEP}
+                  >
+                    Buscar
+                  </button>
+                </div>
+              </div>
+
+              <div className={styles.field}>
+                <label>Responsável</label>
+                <input
+                  type="text"
+                  placeholder="Nome do responsável"
+                  value={form.responsible}
+                  onChange={setField("responsible")}
+                  maxLength={100}
+                />
+              </div>
+            </div>
+
+            <div className={`${styles["modal-row"]} ${styles.single}`}>
+              <div className={styles.field}>
+                <label>Endereço</label>
+                <input
+                  type="text"
+                  placeholder="Rua, número, complemento"
+                  value={form.address}
+                  onChange={setField("address")}
+                  maxLength={100}
+                />
+              </div>
+            </div>
+
+            <div className={styles["modal-row"]}>
+              <div className={styles.field}>
+                <label>Cidade</label>
+                <input
+                  type="text"
+                  placeholder="Cidade"
+                  value={form.city}
+                  onChange={setField("city")}
+                  maxLength={100}
+                />
+              </div>
+              <div className={styles.field}>
+                <label>Estado (UF)</label>
+                <input
+                  type="text"
+                  placeholder="UF"
+                  maxLength={2}
+                  value={form.uf}
+                  onChange={setField("uf")}
+                />
+              </div>
+            </div>
+
+            <div className={styles["modal-row"]}>
+              <div className={styles.field}>
+                <label>Telefone</label>
+                <input
+                  type="text"
+                  placeholder="(00) 00000-0000"
+                  value={form.phone}
+                  onChange={setField("phone")}
+                />
+              </div>
+              <div className={styles.field}>
+                <label>Email *</label>
+                <input
+                  type="email"
+                  placeholder="email@dominio.com"
+                  required
+                  value={form.email}
+                  onChange={setField("email")}
+                  maxLength={70}
+                />
+              </div>
+            </div>
+
+            <div className={styles["modal-row"]}>
+              <div className={styles.field}>
+                <label>Status</label>
+                <Select
+                  className={styles["select-modal"]}
+                  size="small"
+                  value={form.statusId}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, statusId: e.target.value }))
+                  }
+                >
+                  {statusOptions.map((s) => (
+                    <MenuItem key={s.id} value={s.id}>
+                      {s.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </div>
+              {isNew && (
+                <div className={styles.field}>
+                  <label>Coordenadas GPS</label>
+                  <input
+                    type="text"
+                    placeholder="Coordenadas"
+                    value={form.coordinates}
+                    onChange={setField("coordinates")}
+                    maxLength={80}
+                  />
+                </div>
+              )}
+            </div>
+          </form>
         )}
       </Modal>
 

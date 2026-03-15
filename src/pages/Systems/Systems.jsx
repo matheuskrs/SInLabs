@@ -277,159 +277,8 @@ export default function Systems() {
         open={openModal}
         title={systemId === 0 ? "Novo sistema" : "Editar sistema"}
         onClose={() => setOpenModal(false)}
-      >
-        {(close) => (
-          <div className={styles.wrapper}>
-            <form
-              id="sys-form"
-              className={styles["modal-form"]}
-              onSubmit={onSubmitModal}
-            >
-              <div className={styles["modal-avatar-row"]}>
-                <div
-                  className={styles["modal-avatar"]}
-                  onClick={onPickFile}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) =>
-                    e.key === "Enter" || e.key === " " ? onPickFile() : null
-                  }
-                >
-                  {previewImg && (
-                    <img
-                      className={styles["modal-avatar-preview"]}
-                      src={previewImg}
-                    />
-                  )}
-                  <span className={styles["modal-avatar-upload"]}>
-                    <FontAwesomeIcon icon={faUpload} />
-                  </span>
-                </div>
-                <input
-                  ref={fileRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={onFileChange}
-                  style={{ display: "none" }}
-                />
-              </div>
-
-              <div className={styles["modal-row"]}>
-                <div className={styles.field}>
-                  <label>Nome *</label>
-                  <input
-                    type="text"
-                    placeholder="Nome do sistema"
-                    required
-                    value={form.name}
-                    onChange={setField("name")}
-                    maxLength={100}
-                  />
-                </div>
-
-                <div className={styles.field}>
-                  <label>Versão *</label>
-                  <input
-                    type="text"
-                    placeholder="1.0.0"
-                    required
-                    value={form.version}
-                    onChange={setField("version")}
-                    maxLength={20}
-                  />
-                </div>
-              </div>
-
-              <div className={styles["modal-row"]}>
-                <div className={styles.field}>
-                  <label>Categoria</label>
-                  <Select
-                    className={styles["select-modal"]}
-                    size="small"
-                    value={form.categoryId}
-                    onChange={(e) =>
-                      setForm((prev) => ({
-                        ...prev,
-                        categoryId: e.target.value,
-                      }))
-                    }
-                  >
-                    {systemCategories.map((cat) => (
-                      <MenuItem key={cat.id} value={cat.id}>
-                        {cat.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </div>
-
-                <div className={styles.field}>
-                  <label>Tamanho</label>
-                  <input
-                    type="text"
-                    placeholder="100MB"
-                    value={form.size}
-                    onChange={setField("size")}
-                    maxLength={20}
-                  />
-                </div>
-              </div>
-
-              <div className={`${styles["modal-row"]} ${styles.single}`}>
-                <div className={styles.field}>
-                  <label>Imagem de capa</label>
-                  <button
-                    type="button"
-                    className={styles["btn-upload-file"]}
-                    onClick={onPickCoverFile}
-                  >
-                    <FontAwesomeIcon icon={faBox} />
-                    Upload de Arquivo
-                  </button>
-                  <input
-                    ref={coverFileRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={onCoverFileChange}
-                    style={{ display: "none" }}
-                  />
-                </div>
-              </div>
-
-              <div className={`${styles["modal-row"]} ${styles.single}`}>
-                <div className={styles.field}>
-                  <label>Arquivo do Sistema</label>
-                  <button
-                    type="button"
-                    className={styles["btn-upload-file"]}
-                    onClick={onPickSystemFile}
-                  >
-                    <FontAwesomeIcon icon={faBox} />
-                    Upload de Arquivo
-                  </button>
-                  <input
-                    ref={systemFileRef}
-                    type="file"
-                    onChange={onSystemFileChange}
-                    style={{ display: "none" }}
-                  />
-                </div>
-              </div>
-
-              <div className={`${styles["modal-row"]} ${styles.single}`}>
-                <div className={styles.field}>
-                  <label>Descrição *</label>
-                  <textarea
-                    placeholder="Descrição do sistema"
-                    required
-                    value={form.description}
-                    onChange={setField("description")}
-                    maxLength={500}
-                    rows={4}
-                  />
-                </div>
-              </div>
-            </form>
-
+        footer={(close) => (
+          <>
             <div className={styles["modal-actions"]}>
               <button
                 form="sys-form"
@@ -446,7 +295,159 @@ export default function Systems() {
                 Cancelar
               </button>
             </div>
-          </div>
+          </>
+        )}
+      >
+        {() => (
+          <form
+            id="sys-form"
+            className={styles["modal-form"]}
+            onSubmit={onSubmitModal}
+          >
+            <div className={styles["modal-avatar-row"]}>
+              <div
+                className={styles["modal-avatar"]}
+                onClick={onPickFile}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) =>
+                  e.key === "Enter" || e.key === " " ? onPickFile() : null
+                }
+              >
+                {previewImg && (
+                  <img
+                    className={styles["modal-avatar-preview"]}
+                    src={previewImg}
+                  />
+                )}
+                <span className={styles["modal-avatar-upload"]}>
+                  <FontAwesomeIcon icon={faUpload} />
+                </span>
+              </div>
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                onChange={onFileChange}
+                style={{ display: "none" }}
+              />
+            </div>
+
+            <div className={styles["modal-row"]}>
+              <div className={styles.field}>
+                <label>Nome *</label>
+                <input
+                  type="text"
+                  placeholder="Nome do sistema"
+                  required
+                  value={form.name}
+                  onChange={setField("name")}
+                  maxLength={100}
+                />
+              </div>
+
+              <div className={styles.field}>
+                <label>Versão *</label>
+                <input
+                  type="text"
+                  placeholder="1.0.0"
+                  required
+                  value={form.version}
+                  onChange={setField("version")}
+                  maxLength={20}
+                />
+              </div>
+            </div>
+
+            <div className={styles["modal-row"]}>
+              <div className={styles.field}>
+                <label>Categoria</label>
+                <Select
+                  className={styles["select-modal"]}
+                  size="small"
+                  value={form.categoryId}
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      categoryId: e.target.value,
+                    }))
+                  }
+                >
+                  {systemCategories.map((cat) => (
+                    <MenuItem key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </div>
+
+              <div className={styles.field}>
+                <label>Tamanho</label>
+                <input
+                  type="text"
+                  placeholder="100MB"
+                  value={form.size}
+                  onChange={setField("size")}
+                  maxLength={20}
+                />
+              </div>
+            </div>
+
+            <div className={`${styles["modal-row"]} ${styles.single}`}>
+              <div className={styles.field}>
+                <label>Imagem de capa</label>
+                <button
+                  type="button"
+                  className={styles["btn-upload-file"]}
+                  onClick={onPickCoverFile}
+                >
+                  <FontAwesomeIcon icon={faBox} />
+                  Upload de Arquivo
+                </button>
+                <input
+                  ref={coverFileRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={onCoverFileChange}
+                  style={{ display: "none" }}
+                />
+              </div>
+            </div>
+
+            <div className={`${styles["modal-row"]} ${styles.single}`}>
+              <div className={styles.field}>
+                <label>Arquivo do Sistema</label>
+                <button
+                  type="button"
+                  className={styles["btn-upload-file"]}
+                  onClick={onPickSystemFile}
+                >
+                  <FontAwesomeIcon icon={faBox} />
+                  Upload de Arquivo
+                </button>
+                <input
+                  ref={systemFileRef}
+                  type="file"
+                  onChange={onSystemFileChange}
+                  style={{ display: "none" }}
+                />
+              </div>
+            </div>
+
+            <div className={`${styles["modal-row"]} ${styles.single}`}>
+              <div className={styles.field}>
+                <label>Descrição *</label>
+                <textarea
+                  placeholder="Descrição do sistema"
+                  required
+                  value={form.description}
+                  onChange={setField("description")}
+                  maxLength={500}
+                  rows={4}
+                />
+              </div>
+            </div>
+          </form>
         )}
       </Modal>
 
