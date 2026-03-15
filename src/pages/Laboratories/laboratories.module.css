@@ -1,8 +1,7 @@
 .lab-card-wrapper {
   background-color: white;
   border-radius: 10px;
-  margin-right: 30px;
-  border: 1px solid rgba(230, 230, 230, 0.7);
+  border: 1px solid gainsboro;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
   max-width: 2000px;
   display: flex;
@@ -125,15 +124,15 @@
 }
 
 .cards-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 360px));
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   padding: 10px;
-  justify-content: start;
   overflow-y: auto;
   flex: 1 1 auto;
   max-height: 650px;
   min-height: 0;
+  align-content: flex-start;
 }
 
 .empty-state {
@@ -142,7 +141,6 @@
   border-radius: 10px;
   color: var(--tertiary-color-text);
   background: #fff;
-  width: 98%;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -161,10 +159,6 @@
   margin: 0;
   font-size: 13px;
   line-height: 1.4;
-}
-
-.laboratories-container .modal-body {
-  padding-right: 0;
 }
 
 .wrapper .modal-form {
@@ -231,18 +225,6 @@
 }
 .select-modal {
   width: 100%;
-}
-.modal-actions {
-  display: flex;
-  justify-content: flex-start;
-  gap: 10px;
-}
-.modal-actions button {
-  border-radius: 5px;
-  min-width: 120px;
-  padding: 8px 10px;
-  cursor: pointer;
-  transition: 200ms ease-in-out;
 }
 .btn-submit-laboratory {
   background-color: var(--main-color);
@@ -326,8 +308,5 @@
   }
   .modal-row {
     grid-template-columns: 1fr;
-  }
-  .empty-state {
-    width: 90% !important;
   }
 }

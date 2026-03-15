@@ -1,8 +1,7 @@
 .association-wrapper {
   background-color: white;
   border-radius: 10px;
-  margin-right: 30px;
-  border: 1px solid rgba(230, 230, 230, 0.7);
+  border: 1px solid gainsboro;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.02);
   max-width: 2000px;
   display: flex;
@@ -82,7 +81,6 @@
   min-width: 0;
   max-height: 300px;
   overflow-y: auto;
-  padding-right: 4px;
 }
 
 .list-item {
@@ -124,7 +122,6 @@
   border-radius: 10px;
   color: var(--tertiary-color-text);
   background: #fff;
-  width: 98%;
   display: flex;
   justify-content: center;
   flex-direction: column;
