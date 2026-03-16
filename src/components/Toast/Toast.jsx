@@ -100,16 +100,17 @@ export default function Toast({ id, title, message, type, duration = 3000 }) {
     >
       {title && <strong>{title}</strong>}
       <span className={styles["toast-message"]}>{message}</span>
-
-      <button
-        onClick={() => {
-          setSwipeDismissing(false);
-          close();
-        }}
-        aria-label="Fechar"
-      >
-        x
-      </button>
+      {!isMobile &&
+        <button
+          onClick={() => {
+            setSwipeDismissing(false);
+            close();
+          }}
+          aria-label="Fechar"
+        >
+          x
+        </button>
+      }
     </div>
   );
 }
