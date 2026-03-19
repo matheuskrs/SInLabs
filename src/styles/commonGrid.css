@@ -56,3 +56,11 @@
   border-color: var(--main-color);
   transform: scale(1.05);
 }
+
+.grid-fit-content .MuiDataGrid-virtualScroller {
+  min-height: unset !important;
+}
+
+.grid-with-min-height .MuiDataGrid-virtualScroller {
+  min-height: 576px !important;
+}
