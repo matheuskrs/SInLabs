@@ -4,7 +4,7 @@
   border: 1px solid gainsboro;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
   max-width: 2000px;
-  min-height: 700px;
+  min-height: clamp(560px, 78dvh, 980px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -67,14 +67,14 @@
 
 .cards-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 360px));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 320px));
   gap: 10px;
   padding: 10px;
-  justify-content: start;
+  justify-content: center;
   overflow-y: auto;
-  flex: 0 0 auto;
-  max-height: 650px;
-  min-height: 0px;
+  flex: 1 1 auto;
+  min-height: 0;
+  align-content: start;
 }
 
 .empty-state {
@@ -159,8 +159,6 @@
 
 @media (max-width: 700px) {
   .sys-card-wrapper {
-    margin-right: 0;
-    padding-top: 0;
     margin-right: 5px;
     max-height: calc(100dvh - 233px);
   }
@@ -170,7 +168,7 @@
   }
 
   .cards-container {
-    display: block;
+    grid-template-columns: 1fr;
     flex: 1 1 auto;
   }
 
