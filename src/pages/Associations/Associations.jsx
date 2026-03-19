@@ -25,8 +25,8 @@ export default function Associations() {
 
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedProfile, setSelectedProfile] = useState(null);
-  const [selectedLaboratory, setSelectedLaboratory] = useState(null);
-  const [selectedSystem, setSelectedSystem] = useState(null);
+  const [selectedLaboratories, setSelectedLaboratories] = useState([]);
+  const [selectedSystems, setSelectedSystems] = useState([]);
 
   const { confirm, ConfirmDialog } = useConfirm();
   const toast = useToast();
@@ -54,8 +54,23 @@ export default function Associations() {
   const canConfirm =
     !!selectedUser &&
     !!selectedProfile &&
-    !!selectedLaboratory &&
-    !!selectedSystem;
+    selectedLaboratories.length > 0 &&
+    selectedSystems.length > 0;
+
+  const toggleItemSelection = (item, selectedItems, setSelectedItems) => {
+    const alreadySelected = selectedItems.some(
+      (selected) => selected.id === item.id,
+    );
+
+    if (alreadySelected) {
+      setSelectedItems(
+        selectedItems.filter((selected) => selected.id !== item.id),
+      );
+      return;
+    }
+
+    setSelectedItems([...selectedItems, item]);
+  };
 
   const onConfirmAssociation = async () => {
     const ok = await confirm({
@@ -74,8 +89,8 @@ export default function Associations() {
   const onSelectUser = (user) => {
     setSelectedUser(user);
     setSelectedProfile(profilesById.get(user.profileId) ?? null);
-    setSelectedLaboratory(null);
-    setSelectedSystem(null);
+    setSelectedLaboratories([]);
+    setSelectedSystems([]);
   };
 
   useEffect(() => {
@@ -152,13 +167,16 @@ export default function Associations() {
 
                   <span className={styles["title"]}>Laboratórios</span>
                   <span>
-                    {selectedLaboratory?.name ||
-                      "Nenhum laboratório selecionado"}
+                    {selectedLaboratories.length > 0
+                      ? selectedLaboratories.map((lab) => lab.name).join(", ")
+                      : "Nenhum laboratório selecionado"}
                   </span>
 
                   <span className={styles["title"]}>Sistemas</span>
                   <span>
-                    {selectedSystem?.name || "Nenhum sistema selecionado"}
+                    {selectedSystems.length > 0
+                      ? selectedSystems.map((sys) => sys.name).join(", ")
+                      : "Nenhum sistema selecionado"}
                   </span>
                 </div>
 
@@ -213,9 +231,19 @@ export default function Associations() {
                   <li
                     key={lab.id}
                     className={
-                      selectedLaboratory?.id === lab.id ? styles["active"] : ""
+                      selectedLaboratories.some(
+                        (selected) => selected.id === lab.id,
+                      )
+                        ? styles["active"]
+                        : ""
                     }
-                    onClick={() => setSelectedLaboratory(lab)}
+                    onClick={() =>
+                      toggleItemSelection(
+                        lab,
+                        selectedLaboratories,
+                        setSelectedLaboratories,
+                      )
+                    }
                   >
                     {lab.name}
                   </li>
@@ -226,19 +254,33 @@ export default function Associations() {
 
           <div className={styles["association-card"]}>
             <h3>Sistemas</h3>
-            <ul className={styles["selectable-list"]}>
-              {systems.map((sys) => (
-                <li
-                  key={sys.id}
-                  className={
-                    selectedSystem?.id === sys.id ? styles["active"] : ""
-                  }
-                  onClick={() => setSelectedSystem(sys)}
-                >
-                  {sys.name}
-                </li>
-              ))}
-            </ul>
+            {systems.length === 0 ? (
+              <p className={styles["empty-text"]}>
+                Não existem sistemas cadastrados.
+              </p>
+            ) : (
+              <ul className={styles["selectable-list"]}>
+                {systems.map((sys) => (
+                  <li
+                    key={sys.id}
+                    className={
+                      selectedSystems.some((selected) => selected.id === sys.id)
+                        ? styles["active"]
+                        : ""
+                    }
+                    onClick={() =>
+                      toggleItemSelection(
+                        sys,
+                        selectedSystems,
+                        setSelectedSystems,
+                      )
+                    }
+                  >
+                    {sys.name}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       </div>

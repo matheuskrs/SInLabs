@@ -19,6 +19,7 @@ import {
 } from "~/services/ProfileManagement/profileAccessService.api";
 import Header from "~/components/Header/Header";
 import { getProfileStatus } from "~/services/ProfileManagement/profileAccessService.api";
+import MobileGridFooter from "~/components/MobileGridFooter/MobileGridFooter";
 const permissionsPromise = getAccessPermissions();
 const profilesPromise = getAccessProfiles();
 const profileStatusPromise = getProfileStatus();
@@ -32,6 +33,10 @@ export default function ProfileManagement() {
   const [profileDescription, setProfileDescription] = useState("");
   const [profileStatus, setProfileStatus] = useState(1);
   const [profilePermissions, setProfilePermissions] = useState([]);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
   const { showLoading, hideLoading } = useGlobalLoading();
   const { confirm, ConfirmDialog } = useConfirm();
   const toast = useToast();
@@ -57,6 +62,17 @@ export default function ProfileManagement() {
       return true;
     });
   }, [rows, search, status]);
+
+  const totalRows = filteredRows.length;
+  const lastPage = Math.max(
+    0,
+    Math.ceil(totalRows / paginationModel.pageSize) - 1,
+  );
+  const safePage = Math.min(paginationModel.page, lastPage);
+  const showingText =
+    totalRows === 0
+      ? "0 de 0"
+      : `${safePage * paginationModel.pageSize + 1}-${Math.min((safePage + 1) * paginationModel.pageSize, totalRows)} de ${totalRows}`;
 
   const isMobile = useMediaQuery("(max-width:700px)");
   const desktopColumns = useMemo(
@@ -304,14 +320,20 @@ export default function ProfileManagement() {
             placeholder="Buscar perfil..."
             name="access-search"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPaginationModel((prev) => ({ ...prev, page: 0 }));
+            }}
           />
           {!isMobile && (
             <Select
               className={styles["select-user-state-list"]}
               size="small"
               value={status}
-              onChange={(e) => setStatus(e.target.value)}
+              onChange={(e) => {
+                setStatus(e.target.value);
+                setPaginationModel((prev) => ({ ...prev, page: 0 }));
+              }}
             >
               <MenuItem value={0}>Todos os status</MenuItem>
               {profileFilterStatus.map((status) => {
@@ -330,6 +352,7 @@ export default function ProfileManagement() {
           )}
         </div>
         <DataGrid
+          className={filteredRows.length <= paginationModel.pageSize ? "grid-fit-content" : "grid-with-min-height"}
           localeText={ptBR.components.MuiDataGrid.defaultProps.localeText}
           rows={filteredRows}
           columns={columns}
@@ -337,11 +360,28 @@ export default function ProfileManagement() {
           disableRowSelectionOnClick
           disableColumnMenu
           pageSizeOptions={[5, 10, 20]}
-          initialState={{
-            pagination: {
-              paginationModel: { pageSize: 10, page: 0 },
-            },
+          paginationModel={{
+            page: safePage,
+            pageSize: paginationModel.pageSize,
           }}
+          onPaginationModelChange={setPaginationModel}
+          slots={isMobile ? { footer: MobileGridFooter } : undefined}
+          slotProps={
+            isMobile
+              ? {
+                  footer: {
+                    paginationModel: {
+                      page: safePage,
+                      pageSize: paginationModel.pageSize,
+                    },
+                    setPaginationModel,
+                    safePage,
+                    lastPage,
+                    showingText,
+                  },
+                }
+              : undefined
+          }
         />
       </div>
       {isMobile && (

@@ -58,8 +58,8 @@
 }
 
 .wrapper-btn-new-profile-mobile {
-  position: absolute;
-  bottom: 15px;
+  position: fixed;
+  bottom: 25px;
   right: 15px;
 }
 

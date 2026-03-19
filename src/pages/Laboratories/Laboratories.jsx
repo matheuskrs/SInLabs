@@ -5,6 +5,8 @@ import {
   faMagnifyingGlass,
   faPlus,
   faUpload,
+  faChevronLeft,
+  faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import laboratoryImg from "~/assets/Laboratories/laboratoryImg.png";
 import Modal from "~/components/Modal/Modal";
@@ -40,10 +42,6 @@ export default function Laboratories() {
   const statusOptions = use(laboratoryStatusPromise);
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-  useEffect(() => {
-    setPage(1);
-  }, [searchFilter, cityFilter, statusFilter, pageSize]);
 
   const fileRef = useRef(null);
   const [form, setForm] = useState({
@@ -266,6 +264,9 @@ export default function Laboratories() {
   const showingFrom = totalItems === 0 ? 0 : startIndex + 1;
   const showingTo = Math.min(startIndex + pagedLaboratories.length, totalItems);
   const showingText = `Mostrando ${showingFrom} a ${showingTo} de ${totalItems} laboratórios`;
+  const canGoBack = safePage > 1;
+  const canGoNext = safePage < totalPages;
+
   useEffect(() => {
     hideLoading();
   }, [hideLoading]);
@@ -290,7 +291,10 @@ export default function Laboratories() {
               placeholder="Buscar laboratórios..."
               name="laboratories-search"
               value={searchFilter}
-              onChange={(e) => setSearchFilter(e.target.value)}
+              onChange={(e) => {
+                setSearchFilter(e.target.value);
+                setPage(1);
+              }}
             />
           </div>
 
@@ -299,7 +303,10 @@ export default function Laboratories() {
               className={styles["select-filter"]}
               size="small"
               value={cityFilter}
-              onChange={(e) => setCityFilter(e.target.value)}
+              onChange={(e) => {
+                setCityFilter(e.target.value);
+                setPage(1);
+              }}
             >
               <MenuItem value={0}>Todas as cidades</MenuItem>
               <MenuItem value={1}>São Paulo - SP</MenuItem>
@@ -313,7 +320,10 @@ export default function Laboratories() {
               className={styles["select-filter"]}
               size="small"
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
+              onChange={(e) => {
+                setStatusFilter(e.target.value);
+                setPage(1);
+              }}
             >
               <MenuItem value={0}>Todos os status</MenuItem>
               <MenuItem value={1}>Ativo</MenuItem>
@@ -357,17 +367,65 @@ export default function Laboratories() {
             <Select
               size="small"
               value={pageSize}
-              onChange={(e) => setPageSize(e.target.value)}
+              onChange={(e) => {
+                setPageSize(Number(e.target.value));
+                setPage(1);
+              }}
             >
               <MenuItem value={5}>5</MenuItem>
               <MenuItem value={10}>10</MenuItem>
               <MenuItem value={20}>20</MenuItem>
               <MenuItem value={50}>50</MenuItem>
             </Select>
+            <span
+              role={canGoBack ? "button" : undefined}
+              tabIndex={canGoBack ? 0 : -1}
+              onClick={
+                canGoBack
+                  ? () => setPage((prev) => Math.max(prev - 1, 1))
+                  : undefined
+              }
+              onKeyDown={(e) => {
+                if (!canGoBack) return;
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setPage((prev) => Math.max(prev - 1, 1));
+                }
+              }}
+              className={`${styles["pagination-arrow"]} ${
+                !canGoBack ? styles["disabled"] : ""
+              }`}
+            >
+              <FontAwesomeIcon icon={faChevronLeft} />
+            </span>
+            <span
+              role={canGoNext ? "button" : undefined}
+              tabIndex={canGoNext ? 0 : -1}
+              onClick={
+                canGoNext
+                  ? () => setPage((prev) => Math.min(prev + 1, totalPages))
+                  : undefined
+              }
+              onKeyDown={(e) => {
+                if (!canGoNext) return;
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setPage((prev) => Math.min(prev + 1, totalPages));
+                }
+              }}
+              className={`${styles["pagination-arrow"]} ${
+                !canGoNext ? styles["disabled"] : ""
+              }`}
+            >
+              <FontAwesomeIcon icon={faChevronRight} />
+            </span>
           </div>
-          {showingText && (
-            <span className={styles["pagination-text"]}>{showingText}</span>
-          )}
+
+          <div className={styles["pagination-right"]}>
+            {showingText && (
+              <span className={styles["pagination-text"]}>{showingText}</span>
+            )}
+          </div>
         </div>
       </div>
 

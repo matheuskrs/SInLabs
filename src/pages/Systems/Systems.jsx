@@ -6,6 +6,8 @@ import {
   faPlus,
   faUpload,
   faBox,
+  faChevronLeft,
+  faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import systemImg from "~/assets/Systems/systemImg.png";
 import Modal from "~/components/Modal/Modal";
@@ -19,6 +21,7 @@ import {
 } from "~/services/Systems/systemsService.api";
 import SystemCard from "~/components/SystemCard/SystemCard";
 import Header from "~/components/Header/Header";
+
 const systemsPromise = getSystems();
 const systemCategoriesPromise = getSystemCategories();
 
@@ -32,7 +35,7 @@ export default function Systems() {
   const { confirm, ConfirmDialog } = useConfirm();
   const [searchFilter, setSearchFilter] = useState("");
   const [pageSize, setPageSize] = useState(10);
-  const page = 1;
+  const [page, setPage] = useState(1);
   const systems = use(systemsPromise);
   const systemCategories = use(systemCategoriesPromise);
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -167,6 +170,9 @@ export default function Systems() {
   const showingFrom = totalItems === 0 ? 0 : startIndex + 1;
   const showingTo = Math.min(startIndex + pagedSystems.length, totalItems);
   const showingText = `Mostrando ${showingFrom} a ${showingTo} de ${totalItems} sistemas`;
+  const canGoBack = safePage > 1;
+  const canGoNext = safePage < totalPages;
+
   useEffect(() => {
     hideLoading();
   }, [hideLoading]);
@@ -191,7 +197,10 @@ export default function Systems() {
               placeholder="Buscar sistemas..."
               name="systems-search"
               value={searchFilter}
-              onChange={(e) => setSearchFilter(e.target.value)}
+              onChange={(e) => {
+                setSearchFilter(e.target.value);
+                setPage(1);
+              }}
             />
           </div>
 
@@ -200,7 +209,10 @@ export default function Systems() {
               className={styles["select-filter"]}
               size="small"
               value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
+              onChange={(e) => {
+                setCategoryFilter(e.target.value);
+                setPage(1);
+              }}
             >
               <MenuItem value={0}>Todas as categorias</MenuItem>
               {systemCategories.map((cat) => (
@@ -247,17 +259,65 @@ export default function Systems() {
             <Select
               size="small"
               value={pageSize}
-              onChange={(e) => setPageSize(e.target.value)}
+              onChange={(e) => {
+                setPageSize(Number(e.target.value));
+                setPage(1);
+              }}
             >
               <MenuItem value={5}>5</MenuItem>
               <MenuItem value={10}>10</MenuItem>
               <MenuItem value={20}>20</MenuItem>
               <MenuItem value={50}>50</MenuItem>
             </Select>
+            <span
+              role={canGoBack ? "button" : undefined}
+              tabIndex={canGoBack ? 0 : -1}
+              onClick={
+                canGoBack
+                  ? () => setPage((prev) => Math.max(prev - 1, 1))
+                  : undefined
+              }
+              onKeyDown={(e) => {
+                if (!canGoBack) return;
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setPage((prev) => Math.max(prev - 1, 1));
+                }
+              }}
+              className={`${styles["pagination-arrow"]} ${
+                !canGoBack ? styles["disabled"] : ""
+              }`}
+            >
+              <FontAwesomeIcon icon={faChevronLeft} />
+            </span>
+            <span
+              role={canGoNext ? "button" : undefined}
+              tabIndex={canGoNext ? 0 : -1}
+              onClick={
+                canGoNext
+                  ? () => setPage((prev) => Math.min(prev + 1, totalPages))
+                  : undefined
+              }
+              onKeyDown={(e) => {
+                if (!canGoNext) return;
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setPage((prev) => Math.min(prev + 1, totalPages));
+                }
+              }}
+              className={`${styles["pagination-arrow"]} ${
+                !canGoNext ? styles["disabled"] : ""
+              }`}
+            >
+              <FontAwesomeIcon icon={faChevronRight} />
+            </span>
           </div>
-          {showingText && (
-            <span className={styles["pagination-text"]}>{showingText}</span>
-          )}
+
+          <div className={styles["pagination-right"]}>
+            {showingText && (
+              <span className={styles["pagination-text"]}>{showingText}</span>
+            )}
+          </div>
         </div>
       </div>
 

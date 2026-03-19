@@ -22,6 +22,7 @@ import { getAccessProfiles } from "~/services/ProfileManagement/profileAccessSer
 import { getLaboratories } from "~/services/Laboratories/laboratoriesService.api";
 import Header from "~/components/Header/Header";
 import SmartImage from "~/components/SmartImage/SmartImage";
+import MobileGridFooter from "~/components/MobileGridFooter/MobileGridFooter";
 const usersPromise = getUsers();
 const profilesPromise = getAccessProfiles();
 const userStatusPromise = getUserStatus();
@@ -38,6 +39,10 @@ export default function Users() {
   const [statusFilter, setStatusFilter] = useState(0);
   const [openModal, setOpenModal] = useState(false);
   const [userId, setUserId] = useState(0);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
   const { showLoading, hideLoading } = useGlobalLoading();
   const { confirm, ConfirmDialog } = useConfirm();
   const toast = useToast();
@@ -304,6 +309,16 @@ export default function Users() {
     statusFilter,
     profileOptions,
   ]);
+  const totalRows = filteredRows.length;
+  const lastPage = Math.max(
+    0,
+    Math.ceil(totalRows / paginationModel.pageSize) - 1,
+  );
+  const safePage = Math.min(paginationModel.page, lastPage);
+  const showingText =
+    totalRows === 0
+      ? "0 de 0"
+      : `${safePage * paginationModel.pageSize + 1}-${Math.min((safePage + 1) * paginationModel.pageSize, totalRows)} de ${totalRows}`;
 
   const desktopColumns = useMemo(
     () => [
@@ -493,7 +508,10 @@ export default function Users() {
             placeholder="Buscar usuário..."
             name="user-search"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPaginationModel((prev) => ({ ...prev, page: 0 }));
+            }}
           />
           {!isMobile && (
             <Tooltip content="Todos os perfis">
@@ -501,7 +519,10 @@ export default function Users() {
                 className={styles["select-user-state-list"]}
                 size="small"
                 value={profileFilter}
-                onChange={(e) => setProfileFilter(e.target.value)}
+                onChange={(e) => {
+                  setProfileFilter(e.target.value);
+                  setPaginationModel((prev) => ({ ...prev, page: 0 }));
+                }}
               >
                 <MenuItem value={0}>Todos os perfis</MenuItem>
                 {profileOptions.map((p) => (
@@ -518,7 +539,10 @@ export default function Users() {
                 className={styles["select-user-state-list"]}
                 size="small"
                 value={laboratoryFilter}
-                onChange={(e) => setLaboratoryFilter(e.target.value)}
+                onChange={(e) => {
+                  setLaboratoryFilter(e.target.value);
+                  setPaginationModel((prev) => ({ ...prev, page: 0 }));
+                }}
               >
                 <MenuItem value={0}>Todos os Laboratórios</MenuItem>
                 {headerLaboratoryOptions.map((l) => (
@@ -535,7 +559,10 @@ export default function Users() {
                 className={styles["select-user-state-list"]}
                 size="small"
                 value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
+                onChange={(e) => {
+                  setStatusFilter(e.target.value);
+                  setPaginationModel((prev) => ({ ...prev, page: 0 }));
+                }}
               >
                 <MenuItem value={0}>Todos os status</MenuItem>
                 {userStatusOptions.map((s) => (
@@ -558,6 +585,7 @@ export default function Users() {
         </div>
 
         <DataGrid
+          className={filteredRows.length <= paginationModel.pageSize ? "grid-fit-content" : "grid-with-min-height"}
           localeText={ptBR.components.MuiDataGrid.defaultProps.localeText}
           rows={filteredRows}
           columns={columns}
@@ -565,11 +593,28 @@ export default function Users() {
           disableRowSelectionOnClick
           disableColumnMenu
           pageSizeOptions={[5, 10, 20]}
-          initialState={{
-            pagination: {
-              paginationModel: { pageSize: 10, page: 0 },
-            },
+          paginationModel={{
+            page: safePage,
+            pageSize: paginationModel.pageSize,
           }}
+          onPaginationModelChange={setPaginationModel}
+          slots={isMobile ? { footer: MobileGridFooter } : undefined}
+          slotProps={
+            isMobile
+              ? {
+                  footer: {
+                    paginationModel: {
+                      page: safePage,
+                      pageSize: paginationModel.pageSize,
+                    },
+                    setPaginationModel,
+                    safePage,
+                    lastPage,
+                    showingText,
+                  },
+                }
+              : undefined
+          }
         />
       </div>
 
